@@ -38,3 +38,11 @@ amplify/.config/local-*
 amplify/backend/amplify-meta.json
 aws-exports.js
 awsconfiguration.json
+
+#awsamplifyjs
+amplify/\#current-cloud-backend
+aws-info.json
+project-config.json
+aws-exports.*
+amplify/backend/function/*/src/node_modules/
+amplify/backend/function/*/dist/
