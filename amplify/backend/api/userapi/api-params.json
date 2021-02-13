@@ -1,0 +1,42 @@
+{
+    "paths": [
+        {
+            "name": "/api/{user}",
+            "lambdaFunction": "userfunction",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            },
+            "policyResourceName": "/api/*"
+        }
+    ],
+    "resourceName": "userapi",
+    "apiName": "userapi",
+    "functionArns": [
+        {
+            "lambdaFunction": "userfunction"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "amplify-authcra-dev-201930-authRole",
+        "unAuthRoleName": "amplify-authcra-dev-201930-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "userfunction",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}

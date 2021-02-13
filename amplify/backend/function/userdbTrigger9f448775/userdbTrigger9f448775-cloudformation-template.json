@@ -1,14 +1,21 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Lambda Function resource stack creation using Amplify CLI",
+  "Description": "Lambda resource stack creation using Amplify CLI",
   "Parameters": {
-    "CloudWatchRule": {
-      "Type": "String",
-      "Default": "NONE",
-      "Description": " Schedule Expression"
-    },
     "env": {
       "Type": "String"
+    },
+    "storageuserdbName": {
+      "Type": "String",
+      "Default": "storageuserdbName"
+    },
+    "storageuserdbArn": {
+      "Type": "String",
+      "Default": "storageuserdbArn"
+    },
+    "storageuserdbStreamArn": {
+      "Type": "String",
+      "Default": "storageuserdbArn"
     }
   },
   "Conditions": {
@@ -33,12 +40,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "time",
+            "userdbTrigger9f448775",
             {
               "Fn::Join": [
                 "",
                 [
-                  "time",
+                  "userdbTrigger9f448775",
                   "-",
                   {
                     "Ref": "env"
@@ -52,9 +59,6 @@
           "Variables": {
             "ENV": {
               "Ref": "env"
-            },
-            "REGION": {
-              "Ref": "AWS::Region"
             }
           }
         },
@@ -64,12 +68,11 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs12.x",
-        "Layers": [],
+        "Runtime": "nodejs10.x",
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-authcra-dev-201930-deployment",
-          "S3Key": "amplify-builds/time-5374577a66436f753578-build.zip"
+          "S3Key": "amplify-builds/userdbTrigger9f448775-4c54576963537562616b-build.zip"
         }
       }
     },
@@ -79,12 +82,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "authcraLambdaRoled6a71bb6",
+            "userdbLambdaRole9f448775",
             {
               "Fn::Join": [
                 "",
                 [
-                  "authcraLambdaRoled6a71bb6",
+                  "userdbLambdaRole9f448775",
                   "-",
                   {
                     "Ref": "env"
@@ -153,6 +156,59 @@
             }
           ]
         }
+      }
+    },
+    "userdbTriggerPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "lambda-trigger-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:DescribeStream",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:ListStreams"
+              ],
+              "Resource": [
+                {
+                  "Ref": "storageuserdbStreamArn"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "userdbTrigger": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "DependsOn": [
+        "userdbTriggerPolicy"
+      ],
+      "Properties": {
+        "BatchSize": 100,
+        "Enabled": true,
+        "EventSourceArn": {
+          "Ref": "storageuserdbStreamArn"
+        },
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaFunction",
+            "Arn"
+          ]
+        },
+        "StartingPosition": "LATEST"
       }
     }
   },

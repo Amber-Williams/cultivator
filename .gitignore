@@ -46,3 +46,7 @@ project-config.json
 aws-exports.*
 amplify/backend/function/*/src/node_modules/
 amplify/backend/function/*/dist/
+
+
+# local dynamoDB
+/local-db
