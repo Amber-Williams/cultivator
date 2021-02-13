@@ -1,7 +1,7 @@
 {
     "paths": [
         {
-            "name": "/api/{user}",
+            "name": "/api",
             "lambdaFunction": "userfunction",
             "privacy": {
                 "private": true,
@@ -13,7 +13,7 @@
                     "/DELETE"
                 ]
             },
-            "policyResourceName": "/api/*"
+            "policyResourceName": "/api"
         }
     ],
     "resourceName": "userapi",
