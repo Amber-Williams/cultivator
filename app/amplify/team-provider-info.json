@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cultivator-dev-171227-authRole",
+      "UnauthRoleArn": "arn:aws:iam::838197045453:role/amplify-cultivator-dev-171227-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::838197045453:role/amplify-cultivator-dev-171227-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-cultivator-dev-171227-deployment",
+      "UnauthRoleName": "amplify-cultivator-dev-171227-unauthRole",
+      "StackName": "amplify-cultivator-dev-171227",
+      "StackId": "arn:aws:cloudformation:eu-west-1:838197045453:stack/amplify-cultivator-dev-171227/280c0710-707a-11eb-984c-020f2e5ad013",
+      "AmplifyAppId": "d2bgteqs7m2ot2"
+    },
+    "categories": {
+      "auth": {
+        "cultivator7dadf7bc": {}
+      }
+    }
+  }
+}

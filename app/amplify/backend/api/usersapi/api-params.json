@@ -1,0 +1,42 @@
+{
+    "paths": [
+        {
+            "name": "/api",
+            "lambdaFunction": "usersfunction",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            },
+            "policyResourceName": "/api"
+        }
+    ],
+    "resourceName": "usersapi",
+    "apiName": "usersapi",
+    "functionArns": [
+        {
+            "lambdaFunction": "usersfunction"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "amplify-cultivator-dev-171227-authRole",
+        "unAuthRoleName": "amplify-cultivator-dev-171227-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "usersfunction",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
