@@ -1,7 +1,0 @@
-{
-    "tableName": "userdb",
-    "partitionKeyName": "username",
-    "partitionKeyType": "S",
-    "sortKeyName": "last-seen",
-    "sortKeyType": "S"
-}
