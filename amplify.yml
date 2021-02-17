@@ -3,7 +3,7 @@ frontend:
   phases:
     preBuild:
       commands:
-        - cd client
+        - cd app
         - npm install
     build:
       commands: 
