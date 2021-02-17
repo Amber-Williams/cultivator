@@ -1,19 +1,29 @@
 {
   "auth": {
-    "cultivator7dadf7bc": {
+    "cultivatorfa879b9c": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "customAuth": false
     }
   },
-  "storage": {
-    "usersdb": {
-      "service": "DynamoDB",
-      "providerPlugin": "awscloudformation"
-    }
-  },
   "function": {
+    "usersdbTriggerfd4d3ae4": {
+      "service": "Lambda",
+      "providerPlugin": "awscloudformation",
+      "build": true,
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "usersdb",
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ]
+        }
+      ]
+    },
     "usersfunction": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -34,8 +44,14 @@
       ]
     }
   },
+  "storage": {
+    "usersdb": {
+      "service": "DynamoDB",
+      "providerPlugin": "awscloudformation"
+    }
+  },
   "api": {
-    "usersapi": {
+    "userapi": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
       "dependsOn": [

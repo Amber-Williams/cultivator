@@ -11,12 +11,12 @@ function App() {
 
   useEffect(() => {
     Auth.currentAuthenticatedUser().then(user => set_username(user.username));
-    API.get('usersapi', '/api/username').then(data => console.log(data))
+    API.get('userapi', '/api/username').then(data => console.log(data))
   }, [])
 
 
   const clicker = () => {
-    API.post('usersapi', '/api', {
+    API.post('userapi', '/api', {
       body: {
         username,
       }

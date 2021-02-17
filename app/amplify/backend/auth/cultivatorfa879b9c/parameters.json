@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "cultivator7dadf7bc_identitypool_7dadf7bc",
+    "identityPoolName": "cultivatorfa879b9c_identitypool_fa879b9c",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "cultiv7dadf7bc",
-    "userPoolName": "cultivator7dadf7bc_userpool_7dadf7bc",
+    "resourceNameTruncated": "cultivfa879b9c",
+    "userPoolName": "cultivatorfa879b9c_userpool_fa879b9c",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -20,7 +20,7 @@
     "requiredAttributes": [
         "email"
     ],
-    "userpoolClientGenerateSecret": true,
+    "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [
         "email"
@@ -28,10 +28,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "cultiv7dadf7bc_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "cultivfa879b9c_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "7dadf7bc",
-    "resourceName": "cultivator7dadf7bc",
+    "sharedId": "fa879b9c",
+    "resourceName": "cultivatorfa879b9c",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [

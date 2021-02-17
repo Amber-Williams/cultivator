@@ -16,8 +16,8 @@
             "policyResourceName": "/api"
         }
     ],
-    "resourceName": "usersapi",
-    "apiName": "usersapi",
+    "resourceName": "userapi",
+    "apiName": "userapi",
     "functionArns": [
         {
             "lambdaFunction": "usersfunction"
@@ -26,8 +26,8 @@
     "privacy": {
         "auth": 1,
         "unauth": 0,
-        "authRoleName": "amplify-cultivator-dev-171227-authRole",
-        "unAuthRoleName": "amplify-cultivator-dev-171227-unauthRole"
+        "authRoleName": "amplify-cultivator-dev-211631-authRole",
+        "unAuthRoleName": "amplify-cultivator-dev-211631-unauthRole"
     },
     "dependsOn": [
         {
