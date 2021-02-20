@@ -1,5 +1,5 @@
 import React from 'react'
-import types from './types'
+import { types } from './types'
 
 const TypePicker = ({ set_type }) => {
     // TODO: Get types

@@ -22,7 +22,7 @@
         },
         "usersfunction": {
           "deploymentBucketName": "amplify-cultivator-dev-211631-deployment",
-          "s3Key": "amplify-builds/usersfunction-4f634259507179527656-build.zip"
+          "s3Key": "amplify-builds/usersfunction-4a4b4c2f6f5170617258-build.zip"
         }
       }
     }
