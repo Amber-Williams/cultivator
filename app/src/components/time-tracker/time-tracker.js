@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { times } from './types'
 import TypePicker from './type-picker'
+import DatePicker from './../date-picker/date-picker'
 import DayTable from './day-table'
 import moment from 'moment'
 import _ from 'lodash';
@@ -11,6 +12,7 @@ const TimeTracker = ({ API, Auth }) => {
     const [time_entry, set_time_entry] = useState(null)
     const [loading, set_loading] = useState(true)
     const [api_loading, set_api_loading] = useState(false)
+    const [date, set_date] = useState(moment().format('YYYY-MM-DD'))
 
     const stateRef = useRef();
     stateRef.current = { time_entry }; // gets current state outside of api scope
@@ -22,6 +24,7 @@ const TimeTracker = ({ API, Auth }) => {
       API.get('userapi', '/api/username').then(data => {
         // TODO: data can be an empty list here sometimes, if so we need to add the user to the database...can we add them on registration auth?
         data[0].time_entry ? set_time_entry(data[0].time_entry) : set_time_entry(times)
+        console.log(data)
       })
       setMounted(true)
     }, [])
@@ -48,11 +51,13 @@ const TimeTracker = ({ API, Auth }) => {
     const send_entry = () => {
       if (!api_loading) {
         set_api_loading(true)
+
+        // TODO: fix db data model to work with one user to many entry_dates
         
         API.post('userapi', '/api', {
           body: {
             username,
-            entry_date: moment.utc().format(),
+            entry_date: moment(date).utc().format(),
             time_entry: stateRef.current.time_entry
           }
         })
@@ -74,9 +79,16 @@ const TimeTracker = ({ API, Auth }) => {
       }
     }
 
+    function on_date_change(e) {
+      const date = e.target.value
+      set_date(date)
+    }
+
     if (!loading && mounted) {
       return (
         <div className="TimeTracker">
+            <DatePicker date={date} on_change={on_date_change}/>
+            
             <TypePicker type={type} set_type={set_type}/>
             <DayTable type={type} update_time_entry={update_time_entry} time_entry={time_entry}/>
         </div>
