@@ -12,14 +12,20 @@ const Interval = ({ index, main, type, update_time_entry, time_entry }) => {
     useEffect(() => {
         if (time_entry[id]) {
             set_style({
-                backgroundColor: types[time_entry[id]]
+                backgroundColor: types[time_entry[id]],
+                color: types[time_entry[id]] === 'black' ? 'white' : 'black'
+            })
+            console.log(id, 'marked as', time_entry[id])
+        } else {
+            set_style({
+                backgroundColor: types['none'],
+                color: 'black'
             })
         }
-    }, [time_entry])
+    }, [time_entry[id]])
 
     function handle_click(e){
-        // e.target.style.backgroundColor = types[type]
-        update_time_entry(e.target.id, type)
+        type === 'none' ? update_time_entry(e.target.id, null) :  update_time_entry(e.target.id, type)
     }
 
     return <div id={id}

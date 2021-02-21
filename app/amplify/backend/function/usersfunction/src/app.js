@@ -180,7 +180,9 @@ app.post(path, function(req, res) {
       res.statusCode = 500;
       res.json({error: err, url: req.url, body: req.body});
     } else{
-      res.json({success: 'post call succeed!', url: req.url, data: data})
+      // Due to issue with put's only letting ReturnValues be ALL_OLD or NONE (must use update method and can use for ALL_NEW)
+      // return request body
+      res.json({success: 'post call succeed!', url: req.url, data: req.body})
     }
   });
 });

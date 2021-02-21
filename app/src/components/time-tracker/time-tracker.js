@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { times } from './types'
 import TypePicker from './type-picker'
 import DayTable from './day-table'
 import moment from 'moment'
+import _ from 'lodash';
 
 const TimeTracker = ({ API, Auth }) => {
     const [type, set_type] = useState('work')
     const [username, set_username] = useState(null)
     const [time_entry, set_time_entry] = useState(null)
     const [loading, set_loading] = useState(true)
+    const [api_loading, set_api_loading] = useState(false)
+
+    const stateRef = useRef();
+    stateRef.current = { time_entry }; // gets current state outside of api scope
 
     const [mounted, setMounted] = useState(false)
 
@@ -22,7 +27,9 @@ const TimeTracker = ({ API, Auth }) => {
     }, [])
 
     useEffect(() => {
-      if (!loading) {
+      // TODO: refactor loading/mounted states
+
+      if (!loading && time_entry) {
         // TODO: sending entry delay
         send_entry()
       }
@@ -39,22 +46,35 @@ const TimeTracker = ({ API, Auth }) => {
     }
 
     const send_entry = () => {
-    console.log({
-        username,
-        entry_date: moment.utc().format(),
-        time_entry
-      })
-      API.post('userapi', '/api', {
-        body: {
-          username,
-          entry_date: moment.utc().format(),
-          time_entry
-        }
-      })
-      .then(data => console.log(data))
+      if (!api_loading) {
+        set_api_loading(true)
+        
+        API.post('userapi', '/api', {
+          body: {
+            username,
+            entry_date: moment.utc().format(),
+            time_entry: stateRef.current.time_entry
+          }
+        })
+        .then(data => {
+          console.log(data)
+          const sent_time_entry = data?.data?.time_entry
+          const same_states = _.isEqual(stateRef.current.time_entry, sent_time_entry); // frontend and backend states are synced
+          set_api_loading(false)
+
+          if (!same_states) {
+            console.log('states out of sync updating')
+            send_entry()
+          }
+        }).catch(err => {
+          // TODO: error state
+          set_api_loading(false)
+          console.log("ERROR SENDING ENTRY", err)
+        })
+      }
     }
 
-    if (!loading && mounted){
+    if (!loading && mounted) {
       return (
         <div className="TimeTracker">
             <TypePicker type={type} set_type={set_type}/>
@@ -62,7 +82,7 @@ const TimeTracker = ({ API, Auth }) => {
         </div>
       )
     } else {
-      return <div>loading</div>
+      return <div className="text-light m-5">loading</div>
     }
 
 }
