@@ -1,6 +1,6 @@
 {
   "auth": {
-    "cultivatorfa879b9c": {
+    "cultivator642dce55": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -8,30 +8,33 @@
     }
   },
   "function": {
-    "usersdbTriggerfd4d3ae4": {
-      "service": "Lambda",
-      "providerPlugin": "awscloudformation",
+    "userfunction": {
       "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
       "dependsOn": [
         {
           "category": "storage",
-          "resourceName": "usersdb",
+          "resourceName": "database",
           "attributes": [
             "Name",
-            "Arn",
-            "StreamArn"
-          ]
+            "Arn"
+          ],
+          "attributeEnvMap": {
+            "Name": "TABLE_NAME",
+            "Arn": "TABLE_ARN"
+          }
         }
       ]
     },
-    "usersfunction": {
+    "entryfunction": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
       "dependsOn": [
         {
           "category": "storage",
-          "resourceName": "usersdb",
+          "resourceName": "database",
           "attributes": [
             "Name",
             "Arn"
@@ -45,7 +48,7 @@
     }
   },
   "storage": {
-    "usersdb": {
+    "database": {
       "service": "DynamoDB",
       "providerPlugin": "awscloudformation"
     }
@@ -57,7 +60,15 @@
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "usersfunction",
+          "resourceName": "userfunction",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "entryfunction",
           "attributes": [
             "Name",
             "Arn"

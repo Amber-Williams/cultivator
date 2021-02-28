@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+     "configurations": [
+       {
+         "type": "node",
+         "request": "launch",
+         "name": "Launch my Lambda",
+         "program": "/usr/local/bin/amplify",
+         "args": [
+           "function",
+           "invoke",
+          // replace this with the name of your function
+          // the folder in amplify/backend/function/
+           "userfunction"
+         ],
+         "console": "integratedTerminal" 
+       }
+     ]
+   }

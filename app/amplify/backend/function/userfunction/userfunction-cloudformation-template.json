@@ -16,13 +16,13 @@
     "s3Key": {
       "Type": "String"
     },
-    "storageusersdbName": {
+    "storagedatabaseName": {
       "Type": "String",
-      "Default": "storageusersdbName"
+      "Default": "storagedatabaseName"
     },
-    "storageusersdbArn": {
+    "storagedatabaseArn": {
       "Type": "String",
-      "Default": "storageusersdbArn"
+      "Default": "storagedatabaseArn"
     }
   },
   "Conditions": {
@@ -55,12 +55,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "usersfunction",
+            "userfunction",
             {
               "Fn::Join": [
                 "",
                 [
-                  "usersfunction",
+                  "userfunction",
                   "-",
                   {
                     "Ref": "env"
@@ -97,12 +97,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "cultivatorLambdaRole6e4ce780",
+            "cultivatorLambdaRole26eacd1d",
             {
               "Fn::Join": [
                 "",
                 [
-                  "cultivatorLambdaRole6e4ce780",
+                  "cultivatorLambdaRole26eacd1d",
                   "-",
                   {
                     "Ref": "env"
@@ -182,14 +182,14 @@
               ],
               "Resource": [
                 {
-                  "Ref": "storageusersdbArn"
+                  "Ref": "storagedatabaseArn"
                 },
                 {
                   "Fn::Join": [
                     "/",
                     [
                       {
-                        "Ref": "storageusersdbArn"
+                        "Ref": "storagedatabaseArn"
                       },
                       "index/*"
                     ]

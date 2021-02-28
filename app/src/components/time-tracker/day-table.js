@@ -24,12 +24,13 @@ const Interval = ({ index, main, type, update_time_entry, time_entry }) => {
         }
     }, [time_entry[id]])
 
-    function handle_click(e){
+    function select(e){
         type === 'none' ? update_time_entry(e.target.id, null) :  update_time_entry(e.target.id, type)
     }
 
     return <div id={id}
-                onClick={handle_click}
+                onClick={select}
+                onMouseDown={select}
                 style={style}
                 className={index === 0 ? 'Interval Interval--main' : 'Interval'}>
                     {interval_naming[index]}

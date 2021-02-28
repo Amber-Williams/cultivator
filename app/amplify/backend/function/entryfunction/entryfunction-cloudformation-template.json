@@ -1,27 +1,28 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Lambda resource stack creation using Amplify CLI",
+  "Description": "Lambda Function resource stack creation using Amplify CLI",
   "Parameters": {
-    "env": {
-      "Type": "String"
-    },
-    "storageusersdbName": {
+    "CloudWatchRule": {
       "Type": "String",
-      "Default": "storageusersdbName"
-    },
-    "storageusersdbArn": {
-      "Type": "String",
-      "Default": "storageusersdbArn"
-    },
-    "storageusersdbStreamArn": {
-      "Type": "String",
-      "Default": "storageusersdbArn"
+      "Default": "NONE",
+      "Description": " Schedule Expression"
     },
     "deploymentBucketName": {
       "Type": "String"
     },
+    "env": {
+      "Type": "String"
+    },
     "s3Key": {
       "Type": "String"
+    },
+    "storagedatabaseName": {
+      "Type": "String",
+      "Default": "storagedatabaseName"
+    },
+    "storagedatabaseArn": {
+      "Type": "String",
+      "Default": "storagedatabaseArn"
     }
   },
   "Conditions": {
@@ -42,16 +43,24 @@
         "aws:asset:property": "Code"
       },
       "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "deploymentBucketName"
+          },
+          "S3Key": {
+            "Ref": "s3Key"
+          }
+        },
         "Handler": "index.handler",
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "usersdbTriggerfd4d3ae4",
+            "entryfunction",
             {
               "Fn::Join": [
                 "",
                 [
-                  "usersdbTriggerfd4d3ae4",
+                  "entryfunction",
                   "-",
                   {
                     "Ref": "env"
@@ -65,6 +74,9 @@
           "Variables": {
             "ENV": {
               "Ref": "env"
+            },
+            "REGION": {
+              "Ref": "AWS::Region"
             }
           }
         },
@@ -74,16 +86,9 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs10.x",
-        "Timeout": "25",
-        "Code": {
-          "S3Bucket": {
-            "Ref": "deploymentBucketName"
-          },
-          "S3Key": {
-            "Ref": "s3Key"
-          }
-        }
+        "Runtime": "nodejs12.x",
+        "Layers": [],
+        "Timeout": "25"
       }
     },
     "LambdaExecutionRole": {
@@ -92,12 +97,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "usersdbLambdaRolefd4d3ae4",
+            "cultivatorLambdaRole7c362df2",
             {
               "Fn::Join": [
                 "",
                 [
-                  "usersdbLambdaRolefd4d3ae4",
+                  "cultivatorLambdaRole7c362df2",
                   "-",
                   {
                     "Ref": "env"
@@ -163,62 +168,37 @@
                   }
                 ]
               }
-            }
-          ]
-        }
-      }
-    },
-    "usersdbTriggerPolicy": {
-      "DependsOn": [
-        "LambdaExecutionRole"
-      ],
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "lambda-trigger-policy",
-        "Roles": [
-          {
-            "Ref": "LambdaExecutionRole"
-          }
-        ],
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
+            },
             {
               "Effect": "Allow",
               "Action": [
-                "dynamodb:DescribeStream",
-                "dynamodb:GetRecords",
-                "dynamodb:GetShardIterator",
-                "dynamodb:ListStreams"
+                "dynamodb:DescribeTable",
+                "dynamodb:GetItem",
+                "dynamodb:Query",
+                "dynamodb:Scan",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem"
               ],
               "Resource": [
                 {
-                  "Ref": "storageusersdbStreamArn"
+                  "Ref": "storagedatabaseArn"
+                },
+                {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      {
+                        "Ref": "storagedatabaseArn"
+                      },
+                      "index/*"
+                    ]
+                  ]
                 }
               ]
             }
           ]
         }
-      }
-    },
-    "usersdbTrigger": {
-      "Type": "AWS::Lambda::EventSourceMapping",
-      "DependsOn": [
-        "usersdbTriggerPolicy"
-      ],
-      "Properties": {
-        "BatchSize": 100,
-        "Enabled": true,
-        "EventSourceArn": {
-          "Ref": "storageusersdbStreamArn"
-        },
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "LambdaFunction",
-            "Arn"
-          ]
-        },
-        "StartingPosition": "LATEST"
       }
     }
   },

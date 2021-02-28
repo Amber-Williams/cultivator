@@ -13,16 +13,16 @@
     },
     "categories": {
       "auth": {
-        "cultivatorfa879b9c": {}
+        "cultivator642dce55": {}
       },
       "function": {
-        "usersdbTriggerfd4d3ae4": {
+        "userfunction": {
           "deploymentBucketName": "amplify-cultivator-dev-211631-deployment",
-          "s3Key": "amplify-builds/usersdbTriggerfd4d3ae4-6a774c34317546562b6b-build.zip"
+          "s3Key": "amplify-builds/userfunction-4251715a444148656b74-build.zip"
         },
-        "usersfunction": {
+        "entryfunction": {
           "deploymentBucketName": "amplify-cultivator-dev-211631-deployment",
-          "s3Key": "amplify-builds/usersfunction-4867377556344957384f-build.zip"
+          "s3Key": "amplify-builds/entryfunction-593874316f3063653542-build.zip"
         }
       }
     }

@@ -1,30 +1,34 @@
 {
     "paths": [
         {
-            "name": "/api",
-            "lambdaFunction": "usersfunction",
+            "name": "/user",
+            "lambdaFunction": "userfunction",
             "privacy": {
-                "private": true,
-                "auth": [
-                    "/POST",
-                    "/GET",
-                    "/PUT",
-                    "/PATCH",
-                    "/DELETE"
-                ]
+                "open": true
             },
-            "policyResourceName": "/api"
+            "policyResourceName": "/user"
+        },
+        {
+            "name": "/entry",
+            "lambdaFunction": "entryfunction",
+            "privacy": {
+                "open": true
+            },
+            "policyResourceName": "/entry"
         }
     ],
     "resourceName": "userapi",
     "apiName": "userapi",
     "functionArns": [
         {
-            "lambdaFunction": "usersfunction"
+            "lambdaFunction": "userfunction"
+        },
+        {
+            "lambdaFunction": "entryfunction"
         }
     ],
     "privacy": {
-        "auth": 1,
+        "auth": 0,
         "unauth": 0,
         "authRoleName": "amplify-cultivator-dev-211631-authRole",
         "unAuthRoleName": "amplify-cultivator-dev-211631-unauthRole"
@@ -32,11 +36,20 @@
     "dependsOn": [
         {
             "category": "function",
-            "resourceName": "usersfunction",
+            "resourceName": "userfunction",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        },
+        {
+            "category": "function",
+            "resourceName": "entryfunction",
             "attributes": [
                 "Name",
                 "Arn"
             ]
         }
-    ]
+    ],
+    "uuid": "1b41587e"
 }

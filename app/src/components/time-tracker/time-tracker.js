@@ -6,9 +6,8 @@ import DayTable from './day-table'
 import moment from 'moment'
 import _ from 'lodash';
 
-const TimeTracker = ({ API, Auth }) => {
+const TimeTracker = ({ API, Auth, username, token }) => {
     const [type, set_type] = useState('work')
-    const [username, set_username] = useState(null)
     const [time_entry, set_time_entry] = useState(null)
     const [loading, set_loading] = useState(true)
     const [api_loading, set_api_loading] = useState(false)
@@ -20,20 +19,39 @@ const TimeTracker = ({ API, Auth }) => {
     const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
-      Auth.currentAuthenticatedUser().then(user => set_username(user.username))
-      API.get('userapi', '/api/username').then(data => {
-        // TODO: data can be an empty list here sometimes, if so we need to add the user to the database...can we add them on registration auth?
-        data[0].time_entry ? set_time_entry(data[0].time_entry) : set_time_entry(times)
+      API.get('userapi', `/entry?_id=${username}__${moment(date).utc().format('YYYY-MM-DD')}`, {header: {Authentication: token} })
+      .then(data => {
         console.log(data)
+        if (data["_id"])
+          set_time_entry(data.time_entry)
+        else 
+          set_time_entry(times)
+      })
+    }, [date])
+
+    useEffect(() => {
+      // TODO: refactor into a seprate component
+      API.get('userapi', `/user?_id=${username}`)
+        .then(user => {
+          console.log('user', user)
+          if (!user["_id"]) {
+            API.post('userapi', `/user`, {
+              body: {
+                _id: `${username}`,
+                registered: moment().utc().format(),
+              }
+            })
+            .then(user => {
+                console.log(user)
+            })
+          }
       })
       setMounted(true)
     }, [])
 
     useEffect(() => {
       // TODO: refactor loading/mounted states
-
       if (!loading && time_entry) {
-        // TODO: sending entry delay
         send_entry()
       }
       if (loading && time_entry){
@@ -48,23 +66,20 @@ const TimeTracker = ({ API, Auth }) => {
         set_time_entry(time_entry_copy)
     }
 
-    const send_entry = () => {
+    const send_entry = async () => {
       if (!api_loading) {
         set_api_loading(true)
 
-        // TODO: fix db data model to work with one user to many entry_dates
-        
-        API.post('userapi', '/api', {
+        API.post('userapi', '/entry', {
           body: {
-            username,
-            entry_date: moment(date).utc().format(),
+            _id: `${username}__${moment(date).utc().format('YYYY-MM-DD')}`,
+            date: moment(date).utc().format('YYYY-MM-DD'),
             time_entry: stateRef.current.time_entry
           }
         })
         .then(data => {
-          console.log(data)
           const sent_time_entry = data?.data?.time_entry
-          const same_states = _.isEqual(stateRef.current.time_entry, sent_time_entry); // frontend and backend states are synced
+          const same_states = _.isEqual(stateRef.current.time_entry, sent_time_entry) // check frontend and backend states are synced
           set_api_loading(false)
 
           if (!same_states) {
@@ -88,7 +103,6 @@ const TimeTracker = ({ API, Auth }) => {
       return (
         <div className="TimeTracker">
             <DatePicker date={date} on_change={on_date_change}/>
-            
             <TypePicker type={type} set_type={set_type}/>
             <DayTable type={type} update_time_entry={update_time_entry} time_entry={time_entry}/>
         </div>
