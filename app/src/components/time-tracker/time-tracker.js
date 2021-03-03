@@ -10,7 +10,7 @@ import DailyNotes from './daily-notes'
 const TimeTracker = ({ API, username, token }) => {
     const [type, set_type] = useState('work')
     const [time_entry, set_time_entry] = useState(null)
-    const [notes, set_notes] = useState('')
+    const [notes, set_notes] = useState(null)
     const [loading, set_loading] = useState(true)
     const [api_loading, set_api_loading] = useState(false)
     const [date, set_date] = useState(moment().format('YYYY-MM-DD'))
@@ -26,7 +26,7 @@ const TimeTracker = ({ API, username, token }) => {
         console.log(data)
         if (data["_id"]){
           set_time_entry(data.time_entry)
-          set_notes(data.notes)
+          data.notes ? set_notes(data.notes) : set_notes('')
         }
         else 
           set_time_entry(times)
