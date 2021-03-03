@@ -24,12 +24,14 @@ const TimeTracker = ({ API, username, token }) => {
       API.get('userapi', `/entry?_id=${username}__${moment(date).utc().format('YYYY-MM-DD')}`, {header: {Authentication: token} })
       .then(data => {
         console.log(data)
-        if (data["_id"]){
+        if (data["_id"]) {
           set_time_entry(data.time_entry)
-          data.notes ? set_notes(data.notes) : set_notes('')
+          set_notes(data.notes)
         }
-        else 
+        else {
           set_time_entry(times)
+          set_notes('')
+        }
       })
     }, [date])
 

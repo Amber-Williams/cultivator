@@ -6,7 +6,7 @@ const DailyNotes = ({ notes, set_notes }) => {
     const inputRef = useRef();
 
     useEffect(() => {
-        inputRef.current.value = notes;
+        inputRef.current.value = !notes ? '' : notes;
     }, [])
 
     function handleChange(event) {
