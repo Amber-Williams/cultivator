@@ -6,6 +6,7 @@ export const types = {
     productive: 'blue',
     sleep: 'grey',
     finance: 'gold',
+    cultivator: 'greenyellow',
     none: 'white',
 }
 
