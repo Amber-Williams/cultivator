@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react"
-import { Auth } from 'aws-amplify'
+import React, { useState, useEffect } from "./node_modules/react"
+import { Auth } from './node_modules/aws-amplify'
 
 const username = "test"
 const password = "test1234"

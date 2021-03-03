@@ -33,3 +33,12 @@
     font-weight: bold;
     font-size: 1.3rem;
 }
+
+.DailyNotes {
+    width: calc(100% - 4rem);
+    margin: 2rem;
+    background: transparent;
+    border: white 1px solid;
+    color: white;
+    padding: 1rem;
+}

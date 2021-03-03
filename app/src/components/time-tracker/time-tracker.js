@@ -5,16 +5,18 @@ import DatePicker from './../date-picker/date-picker'
 import DayTable from './day-table'
 import moment from 'moment'
 import _ from 'lodash';
+import DailyNotes from './daily-notes'
 
-const TimeTracker = ({ API, Auth, username, token }) => {
+const TimeTracker = ({ API, username, token }) => {
     const [type, set_type] = useState('work')
     const [time_entry, set_time_entry] = useState(null)
+    const [notes, set_notes] = useState('')
     const [loading, set_loading] = useState(true)
     const [api_loading, set_api_loading] = useState(false)
     const [date, set_date] = useState(moment().format('YYYY-MM-DD'))
 
     const stateRef = useRef();
-    stateRef.current = { time_entry }; // gets current state outside of api scope
+    stateRef.current = { time_entry, notes }; // gets current state outside of api scope
 
     const [mounted, setMounted] = useState(false)
 
@@ -22,8 +24,10 @@ const TimeTracker = ({ API, Auth, username, token }) => {
       API.get('userapi', `/entry?_id=${username}__${moment(date).utc().format('YYYY-MM-DD')}`, {header: {Authentication: token} })
       .then(data => {
         console.log(data)
-        if (data["_id"])
+        if (data["_id"]){
           set_time_entry(data.time_entry)
+          set_notes(data.notes)
+        }
         else 
           set_time_entry(times)
       })
@@ -58,7 +62,7 @@ const TimeTracker = ({ API, Auth, username, token }) => {
         set_loading(false)
       } 
       
-    }, [time_entry]);
+    }, [time_entry, notes]);
 
     const update_time_entry = (time, type) => {
         const time_entry_copy = JSON.parse(JSON.stringify(time_entry))
@@ -74,7 +78,8 @@ const TimeTracker = ({ API, Auth, username, token }) => {
           body: {
             _id: `${username}__${moment(date).utc().format('YYYY-MM-DD')}`,
             date: moment(date).utc().format('YYYY-MM-DD'),
-            time_entry: stateRef.current.time_entry
+            time_entry: stateRef.current.time_entry,
+            notes: stateRef.current.notes,
           }
         })
         .then(data => {
@@ -105,6 +110,7 @@ const TimeTracker = ({ API, Auth, username, token }) => {
             <DatePicker date={date} on_change={on_date_change}/>
             <TypePicker type={type} set_type={set_type}/>
             <DayTable type={type} update_time_entry={update_time_entry} time_entry={time_entry}/>
+            <DailyNotes set_notes={set_notes} notes={notes}/>
         </div>
       )
     } else {
