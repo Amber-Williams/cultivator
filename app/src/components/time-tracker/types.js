@@ -1,9 +1,11 @@
+// TODO: move into helper file
 export const types = {
     work: 'black',
     waste: 'red',
     learning: 'green',
     productive: 'blue',
     sleep: 'grey',
+    finance: 'gold',
     none: 'white',
 }
 

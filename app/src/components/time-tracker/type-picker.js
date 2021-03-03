@@ -24,6 +24,7 @@ const TypePicker = ({ set_type }) => {
             <div style={{backgroundColor: types.learning}} onClick={handler}>learning</div>
             <div style={{backgroundColor: types.productive}} onClick={handler}>productive</div>
             <div style={{backgroundColor: types.sleep}} onClick={handler}>sleep</div>
+            <div style={{backgroundColor: types.finance}} onClick={handler}>finance</div>
             <div style={{backgroundColor: types.none, border: '1px solid red'}} onClick={handler}>none</div>
         </div>
     )
