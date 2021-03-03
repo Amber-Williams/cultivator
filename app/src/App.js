@@ -19,14 +19,13 @@ const App = () => {
       const jwt = accessToken.getJwtToken()
       setToken(jwt)
     })
-    
   }, []);
 
 
   return user ? (
     <div className="App">
       <SignOutButton/>
-      <div class="text-light">Hello, {user.username}</div>
+      <div className="text-light">Hello, {user.username}</div>
       <TimeTracker API={API} username={user.username} token={token}/>
       
     </div>

@@ -7,17 +7,17 @@ const DailyNotes = ({ notes, set_notes }) => {
 
     useEffect(() => {
         inputRef.current.value = !notes ? '' : notes;
-    }, [])
+    }, [notes])
 
-    function handleChange(event) {
+    function handle_change(event) {
         event.persist();
-        const handleChangeDebounce = _.debounce((e) => { 
+        const handle_change_debounce = _.debounce((e) => { 
             set_notes(e.target.value)
-        }, 1000);
-        handleChangeDebounce(event);
+        }, 500);
+        handle_change_debounce(event);
     }
 
-    return <textarea ref={inputRef} className="DailyNotes" onChange={handleChange}></textarea>
+    return <textarea ref={inputRef} className="DailyNotes" onChange={handle_change}></textarea>
 }
 
 export default DailyNotes
