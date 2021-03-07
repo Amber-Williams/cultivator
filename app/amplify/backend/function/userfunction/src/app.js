@@ -12,6 +12,8 @@ const AWS = require('aws-sdk')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 var bodyParser = require('body-parser')
 var express = require('express')
+var express = require('express')
+var moment = require('moment')
 
 AWS.config.update({ region: process.env.TABLE_REGION });
 
@@ -79,16 +81,42 @@ app.get(path, function(req, res) {
     Key: params
   }
 
+  function add_unregistered_user() {
+    const body = {
+        _id: params["_id"],
+        registered: moment().utc().format(),
+        entry_types: [
+            { name: "work", color: "#000000" },
+            { name: "sleep", color: "#008000" },
+            { name: "dance", color: "#FF0100" },
+            { name: "none", color: "#FFFFFF" }
+        ]
+    }
+
+    let putItemParams = {
+        TableName: tableName,
+        Item: body
+      }
+      dynamodb.put(putItemParams, (err, data) => {
+        if(err) {
+          res.statusCode = 500;
+          res.json({error: err, url: req.url, body});
+        } else{
+          res.json({success: 'User added successfully!', url: req.url, data: body})
+        }
+      });
+  }
+
   dynamodb.get(getItemParams,(err, data) => {
     if(err) {
-      res.statusCode = 500;
-      res.json({error: 'Could not load items: ' + err.message});
+        res.statusCode = 500;
+        res.json({error: 'Could not load items: ' + err.message});
     } else {
-      if (data.Item) {
-        res.json(data.Item);
-      } else {
-        res.json(data) ;
-      }
+        // we register user if they don't exist
+        if (data.Item && data.Item["_id"]) 
+            res.json(data.Item);
+        else 
+            add_unregistered_user();
     }
   });
 });
@@ -98,7 +126,6 @@ app.get(path, function(req, res) {
 *************************************/
 
 app.put(path, function(req, res) {
-
   if (userIdPresent) {
     req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
   }

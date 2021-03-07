@@ -23,17 +23,6 @@ const TimeTracker = ({ API, username, token }) => {
       API.get('userapi', `/user?_id=${username}`)
         .then(user => {
           console.log('user', user)
-          if (!user["_id"]) {
-            API.post('userapi', `/user`, {
-              body: {
-                _id: `${username}`,
-                registered: moment().utc().format(),
-              }
-            })
-            .then(user => {
-                console.log(user)
-            })
-          }
       })
     }, [])
 
@@ -85,9 +74,8 @@ const TimeTracker = ({ API, username, token }) => {
             const sent_notes = data?.data?.notes
             
             if (stateRef.current.date !== sent_date) {
-                console.log('dates are out of sync')
+                console.error('dates are out of sync')
                 set_api_loading(false)
-                send_entry()
                 return;
             }
 

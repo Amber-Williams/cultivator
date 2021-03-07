@@ -15,7 +15,6 @@ const Interval = ({ index, main, type, update_time_entry, time_entry }) => {
                 backgroundColor: types[time_entry[id]],
                 color: types[time_entry[id]] === 'black' ? 'white' : 'black'
             })
-            console.log(id, 'marked as', time_entry[id])
         } else {
             set_style({
                 backgroundColor: types['none'],
