@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { times } from './types'
+import { times } from './../../utilities/times'
 import TypePicker from './type-picker'
 import DatePicker from './../date-picker/date-picker'
 import DayTable from './day-table'
@@ -14,6 +14,7 @@ const TimeTracker = ({ API, username, token }) => {
     const [loading, set_loading] = useState(true)
     const [api_loading, set_api_loading] = useState(false)
     const [date, set_date] = useState(moment().format('YYYY-MM-DD'))
+    const [type_list, set_type_list] = useState(null)
 
     const stateRef = useRef();
     stateRef.current = { date, time_entry, notes }; // gets current state outside of api scope
@@ -23,6 +24,7 @@ const TimeTracker = ({ API, username, token }) => {
       API.get('userapi', `/user?_id=${username}`)
         .then(user => {
           console.log('user', user)
+          set_type_list(user.entry_types)
       })
     }, [])
 
@@ -98,8 +100,8 @@ const TimeTracker = ({ API, username, token }) => {
       return (
         <div className="TimeTracker">
             <DatePicker date={date} set_date={set_date} />
-            <TypePicker type={type} set_type={set_type}/>
-            <DayTable type={type} update_time_entry={update_time_entry} time_entry={time_entry}/>
+            <TypePicker set_type={set_type} type_list={type_list}/>
+            <DayTable type={type} update_time_entry={update_time_entry} time_entry={time_entry} type_list={type_list}/>
             <DailyNotes set_notes={set_notes} notes={notes}/>
         </div>
       )
