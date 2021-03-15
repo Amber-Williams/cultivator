@@ -20,11 +20,11 @@ const TimeTracker = ({ API, username, token }) => {
     stateRef.current = { date, time_entry, notes }; // gets current state outside of api scope
 
     useEffect(() => {
-      // TODO: refactor into a seprate component
+      // refactor TODO: place into a seprate component
       API.get('userapi', `/user?_id=${username}`)
         .then(user => {
-          console.log('user', user)
-          set_type_list(user.entry_types)
+            console.log('user', user)
+            set_type_list(user.entry_types)
       })
     }, [])
 
@@ -76,6 +76,7 @@ const TimeTracker = ({ API, username, token }) => {
             const sent_notes = data?.data?.notes
             
             if (stateRef.current.date !== sent_date) {
+                // BUG TODO:  if user uses keyboard to change dates too fast it will save over other dates
                 console.error('dates are out of sync')
                 set_api_loading(false)
                 return;

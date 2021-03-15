@@ -1,0 +1,10 @@
+{
+    "httpMethod": "POST",
+    "path": "/entry-type",
+    "headers": {
+        "content-type": "application/json"
+     },
+    "body": "{\"_id\": \"test\",\"entry_type\": {\"name\": \"test\",\"color\": \"#000000\"}}",
+    "resource": "/{proxy+}",
+    "queryStringParameters": {}
+}

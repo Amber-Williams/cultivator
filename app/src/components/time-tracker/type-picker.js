@@ -2,9 +2,6 @@ import React from 'react'
 import { invert_color } from './../../utilities/style'
 
 const TypePicker = ({ set_type, type_list }) => {
-    // TODO: Get types
-    // TODO: Set types
-
     function handler(e) {
         set_type(e.target.innerText)
         const types = document.querySelectorAll('.TypePicker div');
@@ -19,6 +16,8 @@ const TypePicker = ({ set_type, type_list }) => {
         e.target.style.paddingTop = `3px`;
         e.target.style.paddingBottom = `3px`;
     }
+
+    
 
     return (
         <div className="TypePicker">

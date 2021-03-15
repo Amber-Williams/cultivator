@@ -13,11 +13,10 @@ const App = () => {
   const [token, setToken] = useState();
 
   useEffect(() => {
-    Auth.currentAuthenticatedUser().then(user => setUser(user))
-    Auth.currentSession().then(res=>{
-      const accessToken = res.getAccessToken()
-      const jwt = accessToken.getJwtToken()
-      setToken(jwt)
+    Auth.currentAuthenticatedUser().then(user => {
+        setUser(user)
+        const token = user.signInUserSession.idToken.jwtToken;
+        setToken(token);
     })
   }, []);
 

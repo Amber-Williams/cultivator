@@ -57,11 +57,40 @@ const convertUrlType = (param, type) => {
   }
 }
 
+function add_unregistered_user(res, req, params) {
+    console.log(`Creating default user for user ${params["_id"]}`)
+    const body = {
+        _id: params["_id"],
+        registered: moment().utc().format(),
+        entry_types: [
+            { name: "work", color: "#000000" },
+            { name: "sleep", color: "#008000" },
+            { name: "dance", color: "#FF0100" },
+            { name: "none", color: "#FFFFFF" }
+        ]
+    }
+
+    const putItemParams = {
+        TableName: tableName,
+        Item: body
+    }
+
+    dynamodb.put(putItemParams, (err, data) => {
+        if (err) {
+            res.statusCode = 500;
+            res.json({error: err, url: req.url, body});
+        } else{
+            res.json({success: 'User added successfully!', url: req.url, data: body})
+        }
+    });
+}
+
 /*****************************************
  * HTTP Get method for get single object *
  *****************************************/
 
 app.get(path, function(req, res) {
+  // gets user and if they don't exist yet, creates default
   var params = {};
   if (userIdPresent && req.apiGateway) {
     params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
@@ -81,32 +110,6 @@ app.get(path, function(req, res) {
     Key: params
   }
 
-  function add_unregistered_user() {
-    const body = {
-        _id: params["_id"],
-        registered: moment().utc().format(),
-        entry_types: [
-            { name: "work", color: "#000000" },
-            { name: "sleep", color: "#008000" },
-            { name: "dance", color: "#FF0100" },
-            { name: "none", color: "#FFFFFF" }
-        ]
-    }
-
-    let putItemParams = {
-        TableName: tableName,
-        Item: body
-      }
-      dynamodb.put(putItemParams, (err, data) => {
-        if(err) {
-          res.statusCode = 500;
-          res.json({error: err, url: req.url, body});
-        } else{
-          res.json({success: 'User added successfully!', url: req.url, data: body})
-        }
-      });
-  }
-
   dynamodb.get(getItemParams,(err, data) => {
     if(err) {
         res.statusCode = 500;
@@ -116,7 +119,7 @@ app.get(path, function(req, res) {
         if (data.Item && data.Item["_id"]) 
             res.json(data.Item);
         else 
-            add_unregistered_user();
+            add_unregistered_user(res, req, params);
     }
   });
 });

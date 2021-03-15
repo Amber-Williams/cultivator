@@ -15,6 +15,14 @@
                 "open": true
             },
             "policyResourceName": "/entry"
+        },
+        {
+            "name": "/entry-type",
+            "lambdaFunction": "entrytypefunction",
+            "privacy": {
+                "open": true
+            },
+            "policyResourceName": "/entry-type"
         }
     ],
     "resourceName": "userapi",
@@ -25,6 +33,9 @@
         },
         {
             "lambdaFunction": "entryfunction"
+        },
+        {
+            "lambdaFunction": "entrytypefunction"
         }
     ],
     "privacy": {
@@ -49,7 +60,15 @@
                 "Name",
                 "Arn"
             ]
+        },
+        {
+            "category": "function",
+            "resourceName": "entrytypefunction",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
         }
     ],
-    "uuid": "1b41587e"
+    "uuid": "2c2d7336"
 }

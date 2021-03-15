@@ -18,11 +18,15 @@
       "function": {
         "userfunction": {
           "deploymentBucketName": "amplify-cultivator-dev-211631-deployment",
-          "s3Key": "amplify-builds/userfunction-7a4278436a6a66337732-build.zip"
+          "s3Key": "amplify-builds/userfunction-61395134474356687578-build.zip"
         },
         "entryfunction": {
           "deploymentBucketName": "amplify-cultivator-dev-211631-deployment",
-          "s3Key": "amplify-builds/entryfunction-593874316f3063653542-build.zip"
+          "s3Key": "amplify-builds/entryfunction-58784f5265647849366f-build.zip"
+        },
+        "entrytypefunction": {
+          "deploymentBucketName": "amplify-cultivator-dev-211631-deployment",
+          "s3Key": "amplify-builds/entrytypefunction-396951366c3730436d48-build.zip"
         }
       }
     }
