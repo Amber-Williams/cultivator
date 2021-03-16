@@ -20,16 +20,14 @@ const App = () => {
     })
   }, []);
 
-
   return user ? (
     <div className="App">
       <SignOutButton/>
       <div className="text-light">Hello, {user.username}</div>
       <TimeTracker API={API} username={user.username} token={token}/>
-      
     </div>
   ) : (
-    <div>loading</div>
+    <div className="spinner-border text-dark" role="status"></div>
   );
 }
 

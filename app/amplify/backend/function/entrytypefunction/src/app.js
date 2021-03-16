@@ -139,7 +139,7 @@ app.delete(path, function(req, res) {
             "#et" : `entry_types`,
             "#item" : req.body.entry_type,
         },
-        ReturnValues: "UPDATED_NEW"
+        ReturnValues: "ALL_NEW"
     }
 
     dynamodb.update(removeItemParams, (err, data) => {

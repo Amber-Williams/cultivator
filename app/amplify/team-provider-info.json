@@ -18,7 +18,7 @@
       "function": {
         "userfunction": {
           "deploymentBucketName": "amplify-cultivator-dev-211631-deployment",
-          "s3Key": "amplify-builds/userfunction-61395134474356687578-build.zip"
+          "s3Key": "amplify-builds/userfunction-5563576473706e666b52-build.zip"
         },
         "entryfunction": {
           "deploymentBucketName": "amplify-cultivator-dev-211631-deployment",
@@ -26,7 +26,7 @@
         },
         "entrytypefunction": {
           "deploymentBucketName": "amplify-cultivator-dev-211631-deployment",
-          "s3Key": "amplify-builds/entrytypefunction-396951366c3730436d48-build.zip"
+          "s3Key": "amplify-builds/entrytypefunction-6f377962495a7646367a-build.zip"
         }
       }
     }

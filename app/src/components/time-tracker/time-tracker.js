@@ -14,7 +14,7 @@ const TimeTracker = ({ API, username, token }) => {
     const [loading, set_loading] = useState(true)
     const [api_loading, set_api_loading] = useState(false)
     const [date, set_date] = useState(moment().format('YYYY-MM-DD'))
-    const [type_list, set_type_list] = useState(null)
+    const [entry_types, set_entry_types] = useState(null)
 
     const stateRef = useRef();
     stateRef.current = { date, time_entry, notes }; // gets current state outside of api scope
@@ -24,7 +24,7 @@ const TimeTracker = ({ API, username, token }) => {
       API.get('userapi', `/user?_id=${username}`)
         .then(user => {
             console.log('user', user)
-            set_type_list(user.entry_types)
+            set_entry_types(user.entry_types)
       })
     }, [])
 
@@ -101,13 +101,15 @@ const TimeTracker = ({ API, username, token }) => {
       return (
         <div className="TimeTracker">
             <DatePicker date={date} set_date={set_date} />
-            <TypePicker set_type={set_type} type_list={type_list}/>
-            <DayTable type={type} update_time_entry={update_time_entry} time_entry={time_entry} type_list={type_list}/>
+            <TypePicker set_type={set_type} entry_types={entry_types} username={username}/>
+            <DayTable type={type} update_time_entry={update_time_entry} time_entry={time_entry} entry_types={entry_types}/>
             <DailyNotes set_notes={set_notes} notes={notes}/>
         </div>
       )
     } else {
-      return <div className="text-light m-5">loading</div>
+      return (
+        <div className="spinner-border text-light" role="status"></div>
+        )
     }
 
 }
