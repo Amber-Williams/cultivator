@@ -58,16 +58,16 @@ const convertUrlType = (param, type) => {
 }
 
 function add_unregistered_user(res, req, params) {
-    console.log(`Creating default user for user ${params["_id"]}`)
+    console.log(`Creating default user: ${params["_id"]}`)
     const body = {
         _id: params["_id"],
         registered: moment().utc().format(),
-        entry_types: [
-            { name: "work", color: "#000000" },
-            { name: "sleep", color: "#008000" },
-            { name: "dance", color: "#FF0100" },
-            { name: "none", color: "#FFFFFF" }
-        ]
+        entry_types: {
+            "work": { color: "#000000" },
+            "sleep": { color: "#008000" },
+            "dance": { color: "#FF0100" },
+            "none": { color: "#FFFFFF" }
+        }
     }
 
     const putItemParams = {
@@ -77,9 +77,11 @@ function add_unregistered_user(res, req, params) {
 
     dynamodb.put(putItemParams, (err, data) => {
         if (err) {
+            console.error(`FAILED: default user not created`)
             res.statusCode = 500;
             res.json({error: err, url: req.url, body});
         } else{
+            console.log(`SUCCESS: created default user`)
             res.json({success: 'User added successfully!', url: req.url, data: body})
         }
     });

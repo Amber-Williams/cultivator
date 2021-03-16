@@ -1,10 +1,10 @@
 {
-    "httpMethod": "POST",
+    "httpMethod": "DELETE",
     "path": "/entry-type",
     "headers": {
         "content-type": "application/json"
      },
-    "body": "{\"_id\": \"test2\",\"entry_type\": {\"name\": \"testing_test_test\",\"color\": \"#000000\"}}",
+    "body": "{\"_id\": \"test2\", \"entry_type\": \"testing_test_test\"}",
     "resource": "/{proxy+}",
     "queryStringParameters": {}
 }

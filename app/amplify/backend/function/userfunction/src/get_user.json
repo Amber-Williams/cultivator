@@ -1,5 +1,5 @@
 {
     "httpMethod": "GET",
     "path": "/user",
-    "queryStringParameters": {"_id": "test"}
+    "queryStringParameters": {"_id": "test2"}
 }

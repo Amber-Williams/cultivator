@@ -44,20 +44,12 @@ app.use(function(req, res, next) {
   next()
 });
 
-// convert url string param to expected Type
-const convertUrlType = (param, type) => {
-  switch(type) {
-    case "N":
-      return Number.parseInt(param);
-    default:
-      return param;
-  }
-}
 
-/*****************************************
- * HTTP Get method for get single object *
- *****************************************/
+/*********************************************************
+* HTTP Get method for getting all entry types of a user *
+*********************************************************/
 app.get(path, function(req, res) {
+    console.log("STARTED: GET request for getting all entry types of a user")
     let getItemParams = {
       TableName: tableName,
       Key: {
@@ -66,18 +58,24 @@ app.get(path, function(req, res) {
     }
   
     dynamodb.get(getItemParams,(err, data) => {
-      if(err) {
-          res.statusCode = 500;
-          res.json({error: 'Could not load items: ' + err.message});
+      if (err) {
+            console.error("FAILED: HTTP Get method for getting all entry types of a user")
+            res.statusCode = 500;
+            res.json({error: 'Could not load items: ' + err.message});
       } else {
-          // we register user if they don't exist
-          if (data.Item && data.Item.entry_types) 
-              res.json(data.Item.entry_types);
-          else 
-            res.json({
-                'result': 'error', 
-                'message': 'User does not exist'
-            });
+            if (data.Item && data.Item.entry_types) {
+                console.log("SUCCESS: HTTP Get method for getting all entry types of a user")
+                res.statusCode = 200;
+                res.json(data.Item.entry_types);
+            }
+            else {
+                console.error("FAILED: HTTP Get method for getting all entry types of a user")
+                res.statusCode = 404;
+                res.json({
+                    'result': 'error', 
+                    'message': 'User does not exist'
+                });
+            }
       }
     });
 });
@@ -85,83 +83,78 @@ app.get(path, function(req, res) {
 /***********************************************
 * HTTP post method for user adding entry type *
 ************************************************/
-
 app.post(path, function(req, res) {
-    console.log('body is', req.body)
-    
-    console.log('key:', {
-        "_id": req.body["_id"]
-    })
-
     const updateItemParams = {
         TableName: tableName,
         Key: {
             "_id": req.body["_id"]
         },
-        UpdateExpression: "SET #attrName = list_append(#attrName, :i)",
+        UpdateExpression: "SET #entry_types.#entry_name = :entry_type",
         ExpressionAttributeValues: {
-            ':i': [req.body.entry_type],
+            ':entry_type': {'color': req.body.entry_type.color},
         },
         ExpressionAttributeNames: {
-            "#attrName" : "entry_types"
+            "#entry_types" : "entry_types",
+            "#entry_name" : req.body.entry_type.name,
+            
         },
+        ConditionExpression: "attribute_not_exists(#entry_types.#entry_name)",
         ReturnValues: "UPDATED_NEW"
     }
 
-    console.log('updateItemParams created:', JSON.stringify(updateItemParams))
-
     dynamodb.update(updateItemParams, (err, item) => {
         if (err) {
-            console.log('UsrPDATE FAILED! => ', err);
-            res.statusCode = 500;
-            res.json({error: err, url: req.url, body: req.body});
+            
+            if (err.statusCode === 400) {
+                console.error("FAILED: entry already exists")
+                res.statusCode = 400;
+                res.json({error: "Entry already exists", url: req.url, body: req.body});
+            } else {
+                console.error("FAILED: POST request for user adding entry type")
+                res.statusCode = 500;
+                res.json({error: err, url: req.url, body: req.body});
+            }
+           
         } else {
-            console.log('SUCCESS UPDATE! => ', item);
+            console.log("SUCCESS: POST request for user adding entry type")
             item = item.Attributes;
-            res.json({success: 'post call succeed!', url: req.url, data: item})
+            res.statusCode = 200;
+            res.json({success: `${req.body.entry_type.name} successfully added`, data: item })
         }
     });
 });
 
-// /**************************************
-// * HTTP remove method to delete object *
-// ***************************************/
+/***************************************************
+* HTTP delete method to remove a user's entry type *
+****************************************************/
+app.delete(path, function(req, res) {
 
-// app.delete(path + '/object' + hashKeyPath + sortKeyPath, function(req, res) {
-//   var params = {};
-//   if (userIdPresent && req.apiGateway) {
-//     params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
-//   } else {
-//     params[partitionKeyName] = req.params[partitionKeyName];
-//      try {
-//       params[partitionKeyName] = convertUrlType(req.params[partitionKeyName], partitionKeyType);
-//     } catch(err) {
-//       res.statusCode = 500;
-//       res.json({error: 'Wrong column type ' + err});
-//     }
-//   }
-//   if (hasSortKey) {
-//     try {
-//       params[sortKeyName] = convertUrlType(req.params[sortKeyName], sortKeyType);
-//     } catch(err) {
-//       res.statusCode = 500;
-//       res.json({error: 'Wrong column type ' + err});
-//     }
-//   }
+    const removeItemParams = {
+        TableName: tableName,
+        Key: {
+            "_id": req.body["_id"]
+        },
+        UpdateExpression: `REMOVE #et.#item`,
+        ExpressionAttributeNames: {
+            "#et" : `entry_types`,
+            "#item" : req.body.entry_type,
+        },
+        ReturnValues: "UPDATED_NEW"
+    }
 
-//   let removeItemParams = {
-//     TableName: tableName,
-//     Key: params
-//   }
-//   dynamodb.delete(removeItemParams, (err, data)=> {
-//     if(err) {
-//       res.statusCode = 500;
-//       res.json({error: err, url: req.url});
-//     } else {
-//       res.json({url: req.url, data: data});
-//     }
-//   });
-// });
+    dynamodb.update(removeItemParams, (err, data) => {
+        if (err) {
+            console.error("FAILED: DELETE request to remove a user's entry type")
+            res.statusCode = 500;
+            res.json({error: err, url: req.url});
+        } else {
+            console.log("SUCCESS: DELETE request to remove a user's entry type")
+            res.statusCode = 200;
+            res.json({success: `${req.body.entry_type} succesfully removed`});
+        }
+    });
+});
+
 app.listen(3000, function() {
     console.log("App started")
 });
