@@ -99,10 +99,10 @@ app.post(path, function(req, res) {
             
         },
         ConditionExpression: "attribute_not_exists(#entry_types.#entry_name)",
-        ReturnValues: "UPDATED_NEW"
+        ReturnValues: "ALL_NEW"
     }
 
-    dynamodb.update(updateItemParams, (err, item) => {
+    dynamodb.update(updateItemParams, (err, data) => {
         if (err) {
             
             if (err.statusCode === 400) {
@@ -117,9 +117,9 @@ app.post(path, function(req, res) {
            
         } else {
             console.log("SUCCESS: POST request for user adding entry type")
-            item = item.Attributes;
+            const updated_entry_types = data.Attributes.entry_types
             res.statusCode = 200;
-            res.json({success: `${req.body.entry_type.name} successfully added`, data: item })
+            res.json({success: `Entry type: "${req.body.entry_type.name}" successfully added`, data: updated_entry_types })
         }
     });
 });
@@ -148,9 +148,10 @@ app.delete(path, function(req, res) {
             res.statusCode = 500;
             res.json({error: err, url: req.url});
         } else {
+            const updated_entry_types = data.Attributes.entry_types
             console.log("SUCCESS: DELETE request to remove a user's entry type")
             res.statusCode = 200;
-            res.json({success: `${req.body.entry_type} succesfully removed`});
+            res.json({success: `Entry type: "${req.body.entry_type}" successfully removed`, data: updated_entry_types});
         }
     });
 });

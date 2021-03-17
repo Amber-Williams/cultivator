@@ -101,7 +101,7 @@ const TimeTracker = ({ API, username, token }) => {
       return (
         <div className="TimeTracker">
             <DatePicker date={date} set_date={set_date} />
-            <TypePicker set_type={set_type} entry_types={entry_types} username={username}/>
+            <TypePicker set_type={set_type} entry_types={entry_types} set_entry_types={set_entry_types} username={username}/>
             <DayTable type={type} update_time_entry={update_time_entry} time_entry={time_entry} entry_types={entry_types}/>
             <DailyNotes set_notes={set_notes} notes={notes}/>
         </div>

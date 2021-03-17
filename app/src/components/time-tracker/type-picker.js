@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { invert_color } from './../../utilities/style'
 import { API } from 'aws-amplify'
 import CirclePlusIcon from './../../images/icons/circle-plus'
@@ -6,7 +6,7 @@ import CircleMinusIcon from './../../images/icons/circle-minus'
 import CircleArrowGoIcon from './../../images/icons/circle-arrow-go'
 
 const TypePickerItem = ({ name, color, on_click, on_remove }) => (
-    <div onClick={(e) => on_click(e, name)}
+    <div onClick={(e) => on_click(e, name, color)}
          className="d-flex justify-content-between align-items-center px-3"
          style={{ 
             backgroundColor: color, 
@@ -19,13 +19,20 @@ const TypePickerItem = ({ name, color, on_click, on_remove }) => (
     </div>
 )
 
-const TypePicker = ({ set_type, entry_types, username }) => {
+const TypePicker = ({ set_type, entry_types, set_entry_types, username }) => {
     const [ new_entry, set_new_entry ] = useState(null)
-    const [ new_entry_color, set_new_entry_color ] = useState("#e66465")
+    const [ new_entry_color, set_new_entry_color ] = useState("#000000")
     const [ show_entry_editor, set_show_entry_editor ] = useState(false)
 
-    function on_click(event, entry) {
-        set_type(entry)
+    useEffect(() => {
+        API.get('userapi', `/entry-type?_id=${username}`)
+        .then(data => {
+            console.log('added', data)
+        })
+    }, [])
+
+    function on_click(event, name, color) {
+        set_type({ name, color })
         const types = document.querySelectorAll('.TypePicker div');
         types.forEach(t => {
             t.style.border = 'none'
@@ -51,7 +58,8 @@ const TypePicker = ({ set_type, entry_types, username }) => {
             }
         })
         .then(data => {
-            console.log('added', data)
+            console.log(data)
+            set_entry_types(data.data)
         })
     }
 
@@ -65,7 +73,8 @@ const TypePicker = ({ set_type, entry_types, username }) => {
             }
         })
         .then(data => {
-            console.log('deleted', data)
+            console.log(data)
+            set_entry_types(data.data)
         })
     }
 
