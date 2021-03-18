@@ -19,7 +19,7 @@ const Interval = ({ index, main, type, update_time_entry, time_entry, entry_type
 
     useEffect(() => {
         // sets time cell registered entry type with color
-        if (time_entry[id]) {
+        if (time_entry[id] && entry_types) {
             const color = entry_types[time_entry[id]]?.color || '#FFFFFF'
             set_style({
                 backgroundColor: color,
