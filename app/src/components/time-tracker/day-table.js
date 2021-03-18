@@ -28,7 +28,7 @@ const Interval = ({ index, main, type, update_time_entry, time_entry, entry_type
         } else {
             set_empty()
         }
-    }, [time_entry[id]])
+    }, [time_entry[id], entry_types[time_entry[id]]])
 
     function select(e) {
         type.name === 'none' ? update_time_entry(e.target.id, null) :  update_time_entry(e.target.id, type.name)

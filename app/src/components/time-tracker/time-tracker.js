@@ -22,9 +22,10 @@ const TimeTracker = ({ API, username, token }) => {
     useEffect(() => {
       // refactor TODO: place into a seprate component
       API.get('userapi', `/user?_id=${username}`)
-        .then(user => {
-            console.log('user', user)
-            set_entry_types(user.entry_types)
+        .then(data => {
+            console.log('time-tracker /userapi', data)
+            const entry_types = data.data.entry_types
+            set_entry_types(entry_types)
       })
     }, [])
 

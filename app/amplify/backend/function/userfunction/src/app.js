@@ -119,7 +119,7 @@ app.get(path, function(req, res) {
     } else {
         // we register user if they don't exist
         if (data.Item && data.Item["_id"]) 
-            res.json(data.Item);
+            res.json({success: 'Got user successfully', url: req.url, data: data.Item})
         else 
             add_unregistered_user(res, req, params);
     }
