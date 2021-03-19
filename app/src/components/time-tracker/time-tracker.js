@@ -98,7 +98,7 @@ const TimeTracker = ({ API, username, token }) => {
       }
     }
 
-    if (!loading) {
+    if (!loading && entry_types) {
       return (
         <div className="TimeTracker">
             <DatePicker date={date} set_date={set_date} />
