@@ -1,0 +1,18 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - cd app
+        - npm install
+    build:
+      commands: 
+        - '# Execute Amplify CLI with the helper script'
+        - amplifyPush --simple
+        - npm run build
+  artifacts:
+    baseDirectory: /app/build
+    files:
+      - '**/*'
+  cache:
+    paths: []

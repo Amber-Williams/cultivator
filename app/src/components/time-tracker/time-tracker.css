@@ -1,0 +1,44 @@
+.TimeTracker {
+    margin: 3rem;
+}
+
+.TypePicker {
+    width: 100%;
+    max-width: 300px;
+    position: absolute;
+    top: 0;
+    left:0;
+}
+
+.DayTable {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    margin-top: 150px;
+}
+
+.DayTable .Hour {
+    margin: 1rem 0.5rem;
+
+}
+
+.Interval {
+    font-size: 1rem;
+    width: 30px;
+    border: 1px solid black;
+    color: black;
+}
+
+.Interval--main {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.DailyNotes {
+    width: calc(100% - 4rem);
+    margin: 2rem;
+    background: transparent;
+    border: white 1px solid;
+    color: white;
+    padding: 1rem;
+}

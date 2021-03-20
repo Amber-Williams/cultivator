@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+     "configurations": [
+       {
+         "type": "node",
+         "request": "launch",
+         "name": "test user function - recommended",
+         "program": "/usr/local/bin/amplify",
+         "args": [
+           "mock",
+           "function",
+          // replace this with the name of your function
+          // the folder in amplify/backend/function/
+           "userfunction"
+         ],
+         "console": "integratedTerminal",
+         "runtimeExecutable": "/Users/amb3r/.nvm/versions/node/v15.11.0/bin/node"
+       },
+       {
+        "type": "node",
+        "request": "launch",
+        "name": "test user function - manual",
+        "program": "${workspaceFolder}/amplify/backend/function/userfunction/src/app.js",
+        "console": "integratedTerminal",
+        "runtimeExecutable": "/Users/amb3r/.nvm/versions/node/v15.11.0/bin/node"
+      }
+     ]
+   }
