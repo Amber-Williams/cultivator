@@ -23,6 +23,10 @@ if(process.env.ENV && process.env.ENV !== "NONE") {
 }
 
 const path = "/entry-type";
+const userIdPresent = true;
+const partitionKeyName = "_id";
+const partitionKeyType = "S";
+const UNAUTH = 'UNAUTH';
 
 // declare a new express app
 var app = express()
@@ -36,17 +40,37 @@ app.use(function(req, res, next) {
   next()
 });
 
-
+// convert url string param to expected Type
+const convertUrlType = (param, type) => {
+    switch(type) {
+      case "N":
+        return Number.parseInt(param);
+      default:
+        return param;
+    }
+}
+  
 /*********************************************************
 * HTTP Get method for getting all entry types of a user *
 *********************************************************/
 app.get(path, function(req, res) {
+    var params = {};
+    if (userIdPresent && req.apiGateway) {
+      params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+    } else {
+      params[partitionKeyName] = req.params[partitionKeyName];
+      try {
+        params[partitionKeyName] = convertUrlType(req.params[partitionKeyName], partitionKeyType);
+      } catch(err) {
+        res.statusCode = 500;
+        res.json({error: 'Wrong column type ' + err});
+      }
+    }
+
     console.log("STARTED: GET request for getting all entry types of a user")
     let getItemParams = {
       TableName: tableName,
-      Key: {
-          "_id": req.query["_id"]
-      }
+      Key: params
     }
   
     dynamodb.get(getItemParams,(err, data) => {
@@ -76,11 +100,22 @@ app.get(path, function(req, res) {
 * HTTP post method for user adding entry type *
 ************************************************/
 app.post(path, function(req, res) {
+    var params = {};
+    if (userIdPresent && req.apiGateway) {
+      params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+    } else {
+      params[partitionKeyName] = req.params[partitionKeyName];
+      try {
+        params[partitionKeyName] = convertUrlType(req.params[partitionKeyName], partitionKeyType);
+      } catch(err) {
+        res.statusCode = 500;
+        res.json({error: 'Wrong column type ' + err});
+      }
+    }
+
     const updateItemParams = {
         TableName: tableName,
-        Key: {
-            "_id": req.body["_id"]
-        },
+        Key: params,
         UpdateExpression: "SET #entry_types.#entry_name = :entry_type",
         ExpressionAttributeValues: {
             ':entry_type': {'color': req.body.entry_type.color},
@@ -120,12 +155,22 @@ app.post(path, function(req, res) {
 * HTTP delete method to remove a user's entry type *
 ****************************************************/
 app.delete(path, function(req, res) {
+    var params = {};
+    if (userIdPresent && req.apiGateway) {
+      params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+    } else {
+      params[partitionKeyName] = req.params[partitionKeyName];
+      try {
+        params[partitionKeyName] = convertUrlType(req.params[partitionKeyName], partitionKeyType);
+      } catch(err) {
+        res.statusCode = 500;
+        res.json({error: 'Wrong column type ' + err});
+      }
+    }
 
     const removeItemParams = {
         TableName: tableName,
-        Key: {
-            "_id": req.body["_id"]
-        },
+        Key: params,
         UpdateExpression: `REMOVE #et.#item`,
         ExpressionAttributeNames: {
             "#et" : `entry_types`,

@@ -12,6 +12,7 @@ const AWS = require('aws-sdk')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 var bodyParser = require('body-parser')
 var express = require('express')
+var moment = require('moment')
 
 AWS.config.update({ region: process.env.TABLE_REGION });
 
@@ -22,12 +23,16 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
   tableName = tableName + '-' + process.env.ENV;
 }
 
-const userIdPresent = true;
+const userIdPresent = true; // TODO: update in case is required to use that definition
 const partitionKeyName = "_id";
 const partitionKeyType = "S";
-const path = "/entry";
+const sortKeyName = "";
+const sortKeyType = "";
+const hasSortKey = sortKeyName !== "";
+const path = "/test";
 const UNAUTH = 'UNAUTH';
-
+const hashKeyPath = '/:' + partitionKeyName;
+const sortKeyPath = hasSortKey ? '/:' + sortKeyName : '';
 // declare a new express app
 var app = express()
 app.use(bodyParser.json())
@@ -50,6 +55,37 @@ const convertUrlType = (param, type) => {
   }
 }
 
+function add_unregistered_user(res, req, params) {
+    console.log(`Creating default user: ${params["_id"]}`)
+    const body = {
+        _id: params["_id"],
+        registered: moment().utc().format(),
+        entry_types: {
+            "work": { color: "#000000" },
+            "sleep": { color: "#008000" },
+            "dance": { color: "#FF0100" },
+            "none": { color: "#FFFFFF" }
+        }
+    }
+
+    const putItemParams = {
+        TableName: tableName,
+        Item: body
+    }
+
+    dynamodb.put(putItemParams, (err, data) => {
+        if (err) {
+            console.error(`FAILED: default user not created`)
+            res.statusCode = 500;
+            res.json({error: err, url: req.url, body});
+        } else{
+            console.log(`SUCCESS: created default user`)
+            res.statusCode = 201;
+            res.json({success: 'User added successfully!', url: req.url, data: data.Item})
+        }
+    });
+}
+
 /*****************************************
  * HTTP Get method for get single object *
  *****************************************/
@@ -67,8 +103,16 @@ app.get(path, function(req, res) {
       res.json({error: 'Wrong column type ' + err});
     }
   }
+  if (hasSortKey) {
+    try {
+      params[sortKeyName] = convertUrlType(req.params[sortKeyName], sortKeyType);
+    } catch(err) {
+      res.statusCode = 500;
+      res.json({error: 'Wrong column type ' + err});
+    }
+  }
 
-  params[partitionKeyName] = params[partitionKeyName] + '__' + req.body.date
+  params["_id"] = req.query["_id"]
 
   let getItemParams = {
     TableName: tableName,
@@ -77,41 +121,16 @@ app.get(path, function(req, res) {
 
   dynamodb.get(getItemParams,(err, data) => {
     if(err) {
-      res.statusCode = 500;
-      res.json({error: 'Could not load items: ' + err.message});
+        res.statusCode = 500;
+        res.json({error: 'Could not load items: ' + err.message});
     } else {
-      if (data.Item) {
-        res.json(data.Item);
-      } else {
-        res.json(data) ;
-      }
-    }
-  });
-});
-
-/************************************
-* HTTP post method for insert object *
-*************************************/
-
-app.post(path, function(req, res) {
-
-  if (userIdPresent) {
-    req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
-  }
-
-  req.body[partitionKeyName] = req.body['userId'] + '__' + req.body.date
-
-  let putItemParams = {
-    TableName: tableName,
-    Item: req.body
-  }
-
-  dynamodb.put(putItemParams, (err, data) => {
-    if(err) {
-      res.statusCode = 500;
-      res.json({error: err, url: req.url, body: req.body});
-    } else{
-      res.json({success: 'post call succeed!', url: req.url, data: req.body})
+        // we register user if they don't exist
+        if (data.Item && data.Item["_id"]) {
+            res.statusCode = 200;
+            res.json({success: 'Got user successfully', url: req.url, data: data.Item })
+        }
+        else 
+            add_unregistered_user(res, req, params);
     }
   });
 });

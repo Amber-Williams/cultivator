@@ -12,7 +12,6 @@ const AWS = require('aws-sdk')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 var bodyParser = require('body-parser')
 var express = require('express')
-var express = require('express')
 var moment = require('moment')
 
 AWS.config.update({ region: process.env.TABLE_REGION });
@@ -20,20 +19,16 @@ AWS.config.update({ region: process.env.TABLE_REGION });
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 let tableName = "database";
-if(process.env.ENV && process.env.ENV !== "NONE") {
+if (process.env.ENV && process.env.ENV !== "NONE") {
   tableName = tableName + '-' + process.env.ENV;
 }
 
-const userIdPresent = false; // TODO: update in case is required to use that definition
+const userIdPresent = true;
 const partitionKeyName = "_id";
 const partitionKeyType = "S";
-const sortKeyName = "";
-const sortKeyType = "";
-const hasSortKey = sortKeyName !== "";
-const path = "/user";
+const path = "/login";
 const UNAUTH = 'UNAUTH';
-const hashKeyPath = '/:' + partitionKeyName;
-const sortKeyPath = hasSortKey ? '/:' + sortKeyName : '';
+
 // declare a new express app
 var app = express()
 app.use(bodyParser.json())
@@ -43,7 +38,6 @@ app.use(awsServerlessExpressMiddleware.eventContext())
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*")
   res.header("Access-Control-Allow-Headers", "*")
-  res.header("Access-Control-Allow-Methods","OPTIONS,POST,GET,PUT,DELETE")
   next()
 });
 
@@ -58,9 +52,9 @@ const convertUrlType = (param, type) => {
 }
 
 function add_unregistered_user(res, req, params) {
-    console.log(`Creating default user: ${params["_id"]}`)
+    console.log(`Creating default user: ${params[partitionKeyName]}`)
     const body = {
-        _id: params["_id"],
+        _id: params[partitionKeyName],
         registered: moment().utc().format(),
         entry_types: {
             "work": { color: "#000000" },
@@ -79,9 +73,10 @@ function add_unregistered_user(res, req, params) {
         if (err) {
             console.error(`FAILED: default user not created`)
             res.statusCode = 500;
-            res.json({error: err, url: req.url, body});
+            res.json({error: err, url: req.url });
         } else{
             console.log(`SUCCESS: created default user`)
+            res.statusCode = 201;
             res.json({success: 'User added successfully!', url: req.url, data: body})
         }
     });
@@ -92,7 +87,6 @@ function add_unregistered_user(res, req, params) {
  *****************************************/
 
 app.get(path, function(req, res) {
-  // gets user and if they don't exist yet, creates default
   var params = {};
   if (userIdPresent && req.apiGateway) {
     params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
@@ -105,7 +99,6 @@ app.get(path, function(req, res) {
       res.json({error: 'Wrong column type ' + err});
     }
   }
-  params["_id"] = req.query["_id"]
 
   let getItemParams = {
     TableName: tableName,
@@ -118,101 +111,15 @@ app.get(path, function(req, res) {
         res.json({error: 'Could not load items: ' + err.message});
     } else {
         // we register user if they don't exist
-        if (data.Item && data.Item["_id"]) 
-            res.json({success: 'Got user successfully', url: req.url, data: data.Item})
+        if (data.Item && data.Item["_id"]) {
+            res.statusCode = 200;
+            res.json({success: 'Got user successfully', url: req.url, data: data.Item })
+        }
         else 
             add_unregistered_user(res, req, params);
     }
   });
 });
-
-/************************************
-* HTTP put method for insert object *
-*************************************/
-
-app.put(path, function(req, res) {
-  if (userIdPresent) {
-    req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
-  }
-
-  let putItemParams = {
-    TableName: tableName,
-    Item: req.body
-  }
-  dynamodb.put(putItemParams, (err, data) => {
-    if(err) {
-      res.statusCode = 500;
-      res.json({error: err, url: req.url, body: req.body});
-    } else{
-      res.json({success: 'put call succeed!', url: req.url, data: data})
-    }
-  });
-});
-
-/************************************
-* HTTP post method for insert object *
-*************************************/
-
-app.post(path, function(req, res) {
-  // TODO: push post entry into user object
-  if (userIdPresent) {
-    req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
-  }
-
-  let putItemParams = {
-    TableName: tableName,
-    Item: req.body
-  }
-  dynamodb.put(putItemParams, (err, data) => {
-    if(err) {
-      res.statusCode = 500;
-      res.json({error: err, url: req.url, body: req.body});
-    } else {
-      res.json({success: 'post call succeed!', url: req.url, data: data})
-    }
-  });
-});
-
-/**************************************
-* HTTP remove method to delete object *
-***************************************/
-
-app.delete(path + '/object' + hashKeyPath + sortKeyPath, function(req, res) {
-  var params = {};
-  if (userIdPresent && req.apiGateway) {
-    params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
-  } else {
-    params[partitionKeyName] = req.params[partitionKeyName];
-     try {
-      params[partitionKeyName] = convertUrlType(req.params[partitionKeyName], partitionKeyType);
-    } catch(err) {
-      res.statusCode = 500;
-      res.json({error: 'Wrong column type ' + err});
-    }
-  }
-  if (hasSortKey) {
-    try {
-      params[sortKeyName] = convertUrlType(req.params[sortKeyName], sortKeyType);
-    } catch(err) {
-      res.statusCode = 500;
-      res.json({error: 'Wrong column type ' + err});
-    }
-  }
-
-  let removeItemParams = {
-    TableName: tableName,
-    Key: params
-  }
-  dynamodb.delete(removeItemParams, (err, data)=> {
-    if(err) {
-      res.statusCode = 500;
-      res.json({error: err, url: req.url});
-    } else {
-      res.json({url: req.url, data: data});
-    }
-  });
-});
-
 
 app.listen(3000, function() {
     console.log("App started")

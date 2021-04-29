@@ -1,26 +1,47 @@
 {
     "paths": [
         {
-            "name": "/user",
-            "lambdaFunction": "userfunction",
-            "privacy": {
-                "open": true
-            },
-            "policyResourceName": "/user"
-        },
-        {
             "name": "/entry",
             "lambdaFunction": "entryfunction",
             "privacy": {
-                "open": true
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
             },
             "policyResourceName": "/entry"
+        },
+        {
+            "name": "/login",
+            "lambdaFunction": "loginfunction",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            },
+            "policyResourceName": "/login"
         },
         {
             "name": "/entry-type",
             "lambdaFunction": "entrytypefunction",
             "privacy": {
-                "open": true
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
             },
             "policyResourceName": "/entry-type"
         }
@@ -29,17 +50,17 @@
     "apiName": "userapi",
     "functionArns": [
         {
-            "lambdaFunction": "userfunction"
+            "lambdaFunction": "entryfunction"
         },
         {
-            "lambdaFunction": "entryfunction"
+            "lambdaFunction": "loginfunction"
         },
         {
             "lambdaFunction": "entrytypefunction"
         }
     ],
     "privacy": {
-        "auth": 0,
+        "auth": 3,
         "unauth": 0,
         "authRoleName": "amplify-cultivator-dev-211631-authRole",
         "unAuthRoleName": "amplify-cultivator-dev-211631-unauthRole"
@@ -47,7 +68,7 @@
     "dependsOn": [
         {
             "category": "function",
-            "resourceName": "userfunction",
+            "resourceName": "entryfunction",
             "attributes": [
                 "Name",
                 "Arn"
@@ -55,7 +76,7 @@
         },
         {
             "category": "function",
-            "resourceName": "entryfunction",
+            "resourceName": "loginfunction",
             "attributes": [
                 "Name",
                 "Arn"
@@ -70,5 +91,5 @@
             ]
         }
     ],
-    "uuid": "2c2d7336"
+    "uuid": "e2c97f36"
 }

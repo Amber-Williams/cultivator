@@ -1,12 +1,6 @@
 {
-    "httpMethod": "POST",
-    "path": "/entry-type",
-    "headers": {
-        "content-type": "application/json"
-     },
-    "body": "{\"entry_type\": {\"name\": \"testing_test_test\",\"color\": \"#000000\"}}",
-    "resource": "/{proxy+}",
-    "queryStringParameters": {},
+    "httpMethod": "GET",
+    "path": "/login",
     "requestContext" : {
         "identity": {
             "cognitoIdentityPoolId": "test_poolid",

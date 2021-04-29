@@ -8,25 +8,6 @@
     }
   },
   "function": {
-    "userfunction": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "database",
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "attributeEnvMap": {
-            "Name": "TABLE_NAME",
-            "Arn": "TABLE_ARN"
-          }
-        }
-      ]
-    },
     "entryfunction": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -64,6 +45,44 @@
           }
         }
       ]
+    },
+    "testfunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "database",
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "attributeEnvMap": {
+            "Name": "TABLE_NAME",
+            "Arn": "TABLE_ARN"
+          }
+        }
+      ]
+    },
+    "loginfunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "database",
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "attributeEnvMap": {
+            "Name": "TABLE_NAME",
+            "Arn": "TABLE_ARN"
+          }
+        }
+      ]
     }
   },
   "storage": {
@@ -79,7 +98,7 @@
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "userfunction",
+          "resourceName": "entryfunction",
           "attributes": [
             "Name",
             "Arn"
@@ -87,7 +106,7 @@
         },
         {
           "category": "function",
-          "resourceName": "entryfunction",
+          "resourceName": "loginfunction",
           "attributes": [
             "Name",
             "Arn"
