@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { invert_color } from './../../utilities/style'
+import React, { useState } from 'react'
+import { invert_color } from '../../utilities/style'
 import { API } from 'aws-amplify'
-import CirclePlusIcon from './../../images/icons/circle-plus'
-import CircleMinusIcon from './../../images/icons/circle-minus'
-import CircleArrowGoIcon from './../../images/icons/circle-arrow-go'
+import CirclePlusIcon from '../../images/icons/circle-plus'
+import CircleMinusIcon from '../../images/icons/circle-minus'
+import CircleArrowGoIcon from '../../images/icons/circle-arrow-go'
+import "./type-picker.css"
 
 const TypePickerItem = ({ name, color, on_click, on_remove }) => (
     <div onClick={(e) => on_click(e, name, color)}
@@ -23,6 +24,7 @@ const TypePicker = ({ set_type, entry_types, set_entry_types }) => {
     const [ new_entry, set_new_entry ] = useState(null)
     const [ new_entry_color, set_new_entry_color ] = useState("#000000")
     const [ show_entry_editor, set_show_entry_editor ] = useState(false)
+    const [ error, set_error ] = useState(false)
 
     function on_click(event, name, color) {
         set_type({ name, color })
@@ -40,7 +42,13 @@ const TypePicker = ({ set_type, entry_types, set_entry_types }) => {
     }
 
     function on_add() {
-        console.log(new_entry, new_entry_color)
+        set_error(false);
+
+        if (!new_entry || new_entry.trim().length === 0) {
+            set_error('Entry needs valid name');
+            return;
+        }
+
         API.post('api', '/entry-type', {
             body: {
               entry_type: {
@@ -50,13 +58,18 @@ const TypePicker = ({ set_type, entry_types, set_entry_types }) => {
             }
         })
         .then(data => {
-            console.log(data)
+            if (data.error) {
+                set_error(data.error);
+                return
+            }
             set_entry_types(data.data)
-        })
+            set_show_entry_editor(false)
+        }).catch(err => console.log(err)) //TODO: error handling
     }
 
     function on_remove(event, entry_type) {
         event.stopPropagation()
+        set_error(false);
 
         API.del('api', '/entry-type', {
             body: {
@@ -64,17 +77,18 @@ const TypePicker = ({ set_type, entry_types, set_entry_types }) => {
             }
         })
         .then(data => {
-            console.log(data)
             set_entry_types(data.data)
         })
     }
 
     return (
         <div className="TypePicker">
-            {entry_types 
-                    ? Object.entries(entry_types).map((type, i) => <TypePickerItem name={type[0]} color={type[1].color} on_click={on_click} on_remove={on_remove} key={i}/>)
-                    : null
-            }
+            <div className="TypePicker__entries">
+                {entry_types 
+                        ? Object.entries(entry_types).map((type, i) => <TypePickerItem name={type[0]} color={type[1].color} on_click={on_click} on_remove={on_remove} key={i}/>)
+                        : null
+                }
+            </div>
             <div className="border border-white text-light">
                 { show_entry_editor 
                     ? <div className="d-flex justify-content-between align-items-center px-3"> 
@@ -90,6 +104,7 @@ const TypePicker = ({ set_type, entry_types, set_entry_types }) => {
                       </div>
                 }
             </div>
+            <p className="text-danger text-center">{error}</p>
         </div>
     )
 }

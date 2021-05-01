@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { times } from './../../utilities/times'
-import TypePicker from './type-picker'
+import TypePicker from '../type-picker/type-picker'
 import DatePicker from './../date-picker/date-picker'
 import DayTable from './day-table'
 import moment from 'moment'
@@ -31,7 +31,7 @@ const TimeTracker = ({ API }) => {
     useEffect(() => {
         set_api_loading(true);
         
-        API.get('api', `/entry?date=${moment(date).utc().format('YYYY-MM-DD')}`)
+        API.get('api', `/entry?date=${moment(date).format('YYYY-MM-DD')}`)
             .then(data => {
             if (data["_id"]) {
                 data.time_entry ? set_time_entry(data.time_entry) : set_time_entry(times)
@@ -52,32 +52,34 @@ const TimeTracker = ({ API }) => {
         send_entry()
     }, [notes]);
 
-    const update_time_entry = (time, type) => {
+    const update_time_entry = async (time, type) => {
         if (loading) return;
         const time_entry_copy = JSON.parse(JSON.stringify(time_entry))
-        time_entry_copy[time] = type
-        set_time_entry(time_entry_copy)
+        time_entry_copy[time] = type ? type : null
+        await set_time_entry(time_entry_copy)
         send_entry()
     }
 
     const send_entry = async () => {
       if (!api_loading) {
         set_api_loading(true)
+        const date = moment(stateRef.current.date).format('YYYY-MM-DD')
 
         API.post('api', '/entry', {
           body: {
-            date: moment(stateRef.current.date).utc().format('YYYY-MM-DD'),
+            date,
             time_entry: stateRef.current.time_entry,
             notes: stateRef.current.notes,
           }
         }).then(data => {
                 const sent_time_entry = data?.data?.time_entry
-                const sent_date = data?.data?.date
                 const sent_notes = data?.data?.notes
+                const sent_date = data?.data?.date
+                const current_date = moment(stateRef.current.date).format('YYYY-MM-DD')
                 
-                if (stateRef.current.date !== sent_date) {
+                if (current_date !== sent_date) {
                     // BUG TODO:  if user uses keyboard to change dates too fast it will save over other dates
-                    console.error('dates are out of sync')
+                    console.log('dates are out of sync, submitting new POST /entry')
                     set_api_loading(false)
                     return;
                 }
