@@ -4,6 +4,9 @@ import "./time-tracker.css"
 
 const Interval = ({ index, main, type, update_time_entry, time_entry, entry_types }) => {
     const [ style, set_style ] = useState(null)
+    if (main === 24){
+        main = '0'
+    }
     const interval_naming = [main, '15', '30', '45']
     const id = `${main}:${index === 0 ? '00': interval_naming[index]}`
 

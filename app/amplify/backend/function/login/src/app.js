@@ -12,6 +12,7 @@ const AWS = require('aws-sdk')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 var bodyParser = require('body-parser')
 var express = require('express')
+var moment = require('moment')
 
 AWS.config.update({ region: process.env.TABLE_REGION });
 
@@ -25,7 +26,7 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
 const userIdPresent = true;
 const partitionKeyName = "_id";
 const partitionKeyType = "S";
-const path = "/entry";
+const path = "/login";
 const UNAUTH = 'UNAUTH';
 
 // declare a new express app
@@ -50,8 +51,39 @@ const convertUrlType = (param, type) => {
   }
 }
 
+function add_unregistered_user(res, req, params) {
+    console.log(`Creating default user: ${params[partitionKeyName]}`)
+    const body = {
+        _id: params[partitionKeyName],
+        registered: moment().utc().format(),
+        entry_types: {
+            "work": { color: "#000000" },
+            "sleep": { color: "#008000" },
+            "dance": { color: "#FF0100" },
+            "none": { color: "#FFFFFF" }
+        }
+    }
+
+    const putItemParams = {
+        TableName: tableName,
+        Item: body
+    }
+
+    dynamodb.put(putItemParams, (err, data) => {
+        if (err) {
+            console.error(`FAILED: default user not created`)
+            res.statusCode = 500;
+            res.json({error: err, url: req.url });
+        } else{
+            console.log(`SUCCESS: created default user`)
+            res.statusCode = 201;
+            res.json({success: 'User added successfully!', url: req.url, data: body})
+        }
+    });
+}
+
 /*****************************************
- * HTTP Get method for get single object *
+ * HTTP Get user                         *
  *****************************************/
 
 app.get(path, function(req, res) {
@@ -63,11 +95,10 @@ app.get(path, function(req, res) {
     try {
       params[partitionKeyName] = convertUrlType(req.params[partitionKeyName], partitionKeyType);
     } catch(err) {
+      res.statusCode = 500;
       res.json({error: 'Wrong column type ' + err});
     }
   }
-
-  params[partitionKeyName] = params[partitionKeyName] + '__' + req.query.date
 
   let getItemParams = {
     TableName: tableName,
@@ -76,39 +107,16 @@ app.get(path, function(req, res) {
 
   dynamodb.get(getItemParams,(err, data) => {
     if(err) {
-      res.json({error: 'Could not load items: ' + err.message});
+        res.statusCode = 500;
+        res.json({error: 'Could not load items: ' + err.message});
     } else {
-      if (data.Item) {
-        res.json(data.Item);
-      } else {
-        // no entry exists for that date
-        res.json({error: 'No entry for that date'});
-      }
-    }
-  });
-});
-
-/************************************
-* HTTP post method for insert object *
-*************************************/
-
-app.post(path, function(req, res) {
-  if (userIdPresent) {
-    req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
-  }
-
-  req.body[partitionKeyName] = req.body['userId'] + '__' + req.body.date
-
-  let putItemParams = {
-    TableName: tableName,
-    Item: req.body
-  }
-
-  dynamodb.put(putItemParams, (err, data) => {
-    if(err) {
-      res.json({error: err, url: req.url, body: req.body});
-    } else{
-      res.json({success: 'post call succeed!', url: req.url, data: req.body})
+        // we register user if they don't exist
+        if (data.Item && data.Item["_id"]) {
+            res.statusCode = 200;
+            res.json({success: 'Got user successfully', url: req.url, data: data.Item })
+        }
+        else 
+            add_unregistered_user(res, req, params);
     }
   });
 });

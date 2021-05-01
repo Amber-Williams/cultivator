@@ -13,7 +13,14 @@ const App = () => {
 
   useEffect(() => {
     Auth.currentAuthenticatedUser().then(user_obj => {
-        setUsername(user_obj.username)
+        API.get('api', '/login')
+        .then(data => {
+            if (data.success) {
+                setUsername(user_obj.username)
+            }
+            
+        })
+        .catch(err => console.log(err))        
     }).catch(err => console.log(err)); //TODO: error state
   }, []);
 
