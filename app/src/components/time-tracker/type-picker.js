@@ -19,17 +19,10 @@ const TypePickerItem = ({ name, color, on_click, on_remove }) => (
     </div>
 )
 
-const TypePicker = ({ set_type, entry_types, set_entry_types, username }) => {
+const TypePicker = ({ set_type, entry_types, set_entry_types }) => {
     const [ new_entry, set_new_entry ] = useState(null)
     const [ new_entry_color, set_new_entry_color ] = useState("#000000")
     const [ show_entry_editor, set_show_entry_editor ] = useState(false)
-
-    useEffect(() => {
-        API.get('userapi', `/entry-type?_id=${username}`)
-        .then(data => {
-            console.log('added', data)
-        })
-    }, [])
 
     function on_click(event, name, color) {
         set_type({ name, color })
@@ -48,9 +41,8 @@ const TypePicker = ({ set_type, entry_types, set_entry_types, username }) => {
 
     function on_add() {
         console.log(new_entry, new_entry_color)
-        API.post('userapi', '/entry-type', {
+        API.post('api', '/entry-type', {
             body: {
-              _id: `${username}`,
               entry_type: {
                   name: new_entry,
                   color: new_entry_color
@@ -66,9 +58,8 @@ const TypePicker = ({ set_type, entry_types, set_entry_types, username }) => {
     function on_remove(event, entry_type) {
         event.stopPropagation()
 
-        API.del('userapi', '/entry-type', {
+        API.del('api', '/entry-type', {
             body: {
-              _id: `${username}`,
               entry_type
             }
         })

@@ -9,22 +9,19 @@ import './App.css';
 Amplify.configure(config)
 
 const App = () => {
-  const [user, setUser] = useState();
-  const [token, setToken] = useState();
+  const [username, setUsername] = useState(null);
 
   useEffect(() => {
-    Auth.currentAuthenticatedUser().then(user => {
-        setUser(user)
-        const token = user.signInUserSession.idToken.jwtToken;
-        setToken(token);
-    })
+    Auth.currentAuthenticatedUser().then(user_obj => {
+        setUsername(user_obj.username)
+    }).catch(err => console.log(err)); //TODO: error state
   }, []);
 
-  return user ? (
+  return username ? (
     <div className="App">
       <SignOutButton/>
-      <div className="text-light">Hello, {user.username}</div>
-      <TimeTracker API={API} username={user.username} token={token}/>
+      <div className="text-light">Hello, {username}</div>
+      <TimeTracker API={API} />
     </div>
   ) : (
     <div className="spinner-border text-dark" role="status"></div>

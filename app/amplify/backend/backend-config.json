@@ -8,7 +8,7 @@
     }
   },
   "function": {
-    "userfunction": {
+    "entry": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
@@ -27,26 +27,7 @@
         }
       ]
     },
-    "entryfunction": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "database",
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "attributeEnvMap": {
-            "Name": "TABLE_NAME",
-            "Arn": "TABLE_ARN"
-          }
-        }
-      ]
-    },
-    "entrytypefunction": {
+    "entrytype": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
@@ -73,13 +54,13 @@
     }
   },
   "api": {
-    "userapi": {
+    "api": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "userfunction",
+          "resourceName": "entry",
           "attributes": [
             "Name",
             "Arn"
@@ -87,15 +68,7 @@
         },
         {
           "category": "function",
-          "resourceName": "entryfunction",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "entrytypefunction",
+          "resourceName": "entrytype",
           "attributes": [
             "Name",
             "Arn"

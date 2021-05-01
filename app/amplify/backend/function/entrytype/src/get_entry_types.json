@@ -1,0 +1,20 @@
+{
+    "httpMethod": "GET",
+    "path": "/entry-type",
+    "queryStringParameters": {},
+    "requestContext": {
+        "identity": {
+            "cognitoIdentityPoolId": "test_pool_id",
+            "accountId": "test_account_id",
+            "cognitoIdentityId": "eu-west-2:1f8a93dd-3bbc-4d79-b125-bfb3079f4907",
+            "caller": null,
+            "sourceIp": "XX.XXX.X.XXX",
+            "accessKey": null,
+            "cognitoAuthenticationType": null,
+            "cognitoAuthenticationProvider": null,
+            "userArn": null,
+            "userAgent": "aws-amplify/0.4.x react-native",
+            "user": null
+        }
+    }
+}

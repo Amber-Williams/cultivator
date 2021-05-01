@@ -55,12 +55,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "entryfunction",
+            "entrytype",
             {
               "Fn::Join": [
                 "",
                 [
-                  "entryfunction",
+                  "entrytype",
                   "-",
                   {
                     "Ref": "env"
@@ -86,7 +86,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs12.x",
+        "Runtime": "nodejs14.x",
         "Layers": [],
         "Timeout": "25"
       }
@@ -97,12 +97,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "cultivatorLambdaRole7c362df2",
+            "cultivatorLambdaRole7944c828",
             {
               "Fn::Join": [
                 "",
                 [
-                  "cultivatorLambdaRole7c362df2",
+                  "cultivatorLambdaRole7944c828",
                   "-",
                   {
                     "Ref": "env"
