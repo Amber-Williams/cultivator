@@ -68,7 +68,7 @@ app.get(path, function(req, res) {
     }
   }
 
-  params[partitionKeyName] = params[partitionKeyName] + '__' + req.body.date
+  params[partitionKeyName] = params[partitionKeyName] + '__' + req.query.date
 
   let getItemParams = {
     TableName: tableName,
@@ -83,7 +83,9 @@ app.get(path, function(req, res) {
       if (data.Item) {
         res.json(data.Item);
       } else {
-        res.json(data) ;
+        // no entry exists for that date
+        res.statusCode = 404;
+        res.json(data);
       }
     }
   });
@@ -94,7 +96,6 @@ app.get(path, function(req, res) {
 *************************************/
 
 app.post(path, function(req, res) {
-
   if (userIdPresent) {
     req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
   }

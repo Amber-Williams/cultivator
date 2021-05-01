@@ -55,12 +55,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "testfunction",
+            "entrytype",
             {
               "Fn::Join": [
                 "",
                 [
-                  "testfunction",
+                  "entrytype",
                   "-",
                   {
                     "Ref": "env"
@@ -97,12 +97,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "cultivatorLambdaRole0ea8c10c",
+            "cultivatorLambdaRole7944c828",
             {
               "Fn::Join": [
                 "",
                 [
-                  "cultivatorLambdaRole0ea8c10c",
+                  "cultivatorLambdaRole7944c828",
                   "-",
                   {
                     "Ref": "env"

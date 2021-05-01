@@ -1,0 +1,25 @@
+{
+    "httpMethod": "POST",
+    "path": "/entry",
+    "headers": {
+        "content-type": "application/json"
+    },
+    "body": "{\"date\": \"2021-05-01\", \"time_entry\": {\"1:00\": \"stuff\"},\"notes\": \"blah blah blah\"}",
+    "resource": "/{proxy+}",
+    "queryStringParameters": {},
+    "requestContext": {
+        "identity": {
+            "cognitoIdentityPoolId": "test_pool_id",
+            "accountId": "test_account_id",
+            "cognitoIdentityId": "test_cognito_identity_id",
+            "caller": null,
+            "sourceIp": "XX.XXX.X.XXX",
+            "accessKey": null,
+            "cognitoAuthenticationType": null,
+            "cognitoAuthenticationProvider": null,
+            "userArn": null,
+            "userAgent": "aws-amplify/0.4.x react-native",
+            "user": null
+        }
+    }
+}

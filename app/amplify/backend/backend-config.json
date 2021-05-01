@@ -8,7 +8,7 @@
     }
   },
   "function": {
-    "entryfunction": {
+    "entry": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
@@ -27,45 +27,7 @@
         }
       ]
     },
-    "entrytypefunction": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "database",
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "attributeEnvMap": {
-            "Name": "TABLE_NAME",
-            "Arn": "TABLE_ARN"
-          }
-        }
-      ]
-    },
-    "testfunction": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "database",
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "attributeEnvMap": {
-            "Name": "TABLE_NAME",
-            "Arn": "TABLE_ARN"
-          }
-        }
-      ]
-    },
-    "loginfunction": {
+    "entrytype": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
@@ -92,13 +54,13 @@
     }
   },
   "api": {
-    "userapi": {
+    "api": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "entryfunction",
+          "resourceName": "entry",
           "attributes": [
             "Name",
             "Arn"
@@ -106,15 +68,7 @@
         },
         {
           "category": "function",
-          "resourceName": "loginfunction",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "entrytypefunction",
+          "resourceName": "entrytype",
           "attributes": [
             "Name",
             "Arn"

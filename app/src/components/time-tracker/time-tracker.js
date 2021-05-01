@@ -7,7 +7,7 @@ import moment from 'moment'
 import _ from 'lodash';
 import DailyNotes from './daily-notes'
 
-const TimeTracker = ({ API, username, token }) => {
+const TimeTracker = ({ API }) => {
     const [type, set_type] = useState('work')
     const [time_entry, set_time_entry] = useState(null)
     const [notes, set_notes] = useState(null)
@@ -20,30 +20,31 @@ const TimeTracker = ({ API, username, token }) => {
     stateRef.current = { date, time_entry, notes }; // gets current state outside of api scope
 
     useEffect(() => {
-      // refactor TODO: place into a seprate component
-      API.get('userapi', `/user?_id=${username}`)
-        .then(data => {
-            console.log('time-tracker /userapi', data)
-            const entry_types = data.data.entry_types
-            set_entry_types(entry_types)
-      })
+        API.get('api', '/entry-type')
+            .then(entry_types => {
+                console.log('/entry_type', entry_types)
+                set_entry_types(entry_types)
+            })
+            .catch(err => console.log(err))
     }, [])
 
     useEffect(() => {
-        set_api_loading(true)
-        API.get('userapi', `/entry?_id=${username}__${moment(date).utc().format('YYYY-MM-DD')}`, {header: {Authentication: token} })
-        .then(data => {
-          if (data["_id"]) {
-              data.time_entry ? set_time_entry(data.time_entry) : set_time_entry(times)
-              data.notes ? set_notes(data.notes) : set_notes('')
-          }
-          else {
-            set_time_entry(times)
-            set_notes('')
-          }
-          set_api_loading(false)
-          set_loading(false)
-        })
+        set_api_loading(true);
+        
+        API.get('api', `/entry?date=${moment(date).utc().format('YYYY-MM-DD')}`)
+            .then(data => {
+            if (data["_id"]) {
+                data.time_entry ? set_time_entry(data.time_entry) : set_time_entry(times)
+                data.notes ? set_notes(data.notes) : set_notes('')
+            }
+            else {
+                set_time_entry(times)
+                set_notes('')
+            }
+            set_api_loading(false)
+            set_loading(false)
+            })
+            .catch(err => console.log(err)) // TODO: error state
       }, [date])
 
     useEffect(() => {
@@ -63,38 +64,37 @@ const TimeTracker = ({ API, username, token }) => {
       if (!api_loading) {
         set_api_loading(true)
 
-        API.post('userapi', '/entry', {
+        API.post('api', '/entry', {
           body: {
-            _id: `${username}__${moment(stateRef.current.date).utc().format('YYYY-MM-DD')}`,
             date: moment(stateRef.current.date).utc().format('YYYY-MM-DD'),
             time_entry: stateRef.current.time_entry,
             notes: stateRef.current.notes,
           }
-        })
-        .then(data => {
-            const sent_time_entry = data?.data?.time_entry
-            const sent_date = data?.data?.date
-            const sent_notes = data?.data?.notes
-            
-            if (stateRef.current.date !== sent_date) {
-                // BUG TODO:  if user uses keyboard to change dates too fast it will save over other dates
-                console.error('dates are out of sync')
-                set_api_loading(false)
-                return;
-            }
+        }).then(data => {
+                const sent_time_entry = data?.data?.time_entry
+                const sent_date = data?.data?.date
+                const sent_notes = data?.data?.notes
+                
+                if (stateRef.current.date !== sent_date) {
+                    // BUG TODO:  if user uses keyboard to change dates too fast it will save over other dates
+                    console.error('dates are out of sync')
+                    set_api_loading(false)
+                    return;
+                }
 
-            const same_states = _.isEqual(stateRef.current.time_entry, sent_time_entry) && _.isEqual(stateRef.current.notes, sent_notes) // check frontend and backend states are synced
+                const same_states = _.isEqual(stateRef.current.time_entry, sent_time_entry) && _.isEqual(stateRef.current.notes, sent_notes) // check frontend and backend states are synced
+                set_api_loading(false)
+                
+                if (!same_states) {
+                    console.log('states out of sync updating')
+                    setTimeout(send_entry.bind(this), 500)
+                }
+            })
+            .catch(err => {
+            // TODO: error state
             set_api_loading(false)
-            
-            if (!same_states) {
-                console.log('states out of sync updating')
-                setTimeout(send_entry.bind(this), 500)
-            }
-        }).catch(err => {
-          // TODO: error state
-          set_api_loading(false)
-          console.error("Error sending entry", err)
-        })
+            console.error("Error sending entry", err)
+            })
       }
     }
 
@@ -102,7 +102,7 @@ const TimeTracker = ({ API, username, token }) => {
       return (
         <div className="TimeTracker">
             <DatePicker date={date} set_date={set_date} />
-            <TypePicker set_type={set_type} entry_types={entry_types} set_entry_types={set_entry_types} username={username}/>
+            <TypePicker set_type={set_type} entry_types={entry_types} set_entry_types={set_entry_types}/>
             <DayTable type={type} update_time_entry={update_time_entry} time_entry={time_entry} entry_types={entry_types}/>
             <DailyNotes set_notes={set_notes} notes={notes}/>
         </div>
