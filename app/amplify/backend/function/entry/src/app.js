@@ -12,6 +12,7 @@ const AWS = require('aws-sdk')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 var bodyParser = require('body-parser')
 var express = require('express')
+var moment = require('moment')
 
 AWS.config.update({ region: process.env.TABLE_REGION });
 
@@ -50,10 +51,9 @@ const convertUrlType = (param, type) => {
   }
 }
 
-/*****************************************
- * HTTP Get method for get single object *
- *****************************************/
-
+/********************************************
+ * HTTP GET - single dated entry            *
+ ********************************************/
 app.get(path, function(req, res) {
   var params = {};
   if (userIdPresent && req.apiGateway) {
@@ -79,7 +79,7 @@ app.get(path, function(req, res) {
       res.json({error: 'Could not load items: ' + err.message});
     } else {
       if (data.Item) {
-        res.json(data.Item);
+        res.json(data.Item); // TODO: update this to use {success, data} formatting
       } else {
         // no entry exists for that date
         res.json({error: 'No entry for that date'});
@@ -88,16 +88,16 @@ app.get(path, function(req, res) {
   });
 });
 
-/************************************
-* HTTP post method for insert object *
-*************************************/
+/******************************************
+* HTTP POST -  editing single dated entry *
+*******************************************/
 
 app.post(path, function(req, res) {
   if (userIdPresent) {
-    req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+    req.body['user_id'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
   }
 
-  req.body[partitionKeyName] = req.body['userId'] + '__' + req.body.date
+  req.body[partitionKeyName] = req.body['user_id'] + '__' + req.body.date
 
   let putItemParams = {
     TableName: tableName,
@@ -106,11 +106,67 @@ app.post(path, function(req, res) {
 
   dynamodb.put(putItemParams, (err, data) => {
     if(err) {
-      res.json({error: err, url: req.url, body: req.body});
+      res.json({error: err, url: req.url, body: req.body}); //TODO: update this from body to data and remove url
     } else{
-      res.json({success: 'post call succeed!', url: req.url, data: req.body})
+      res.json({success: 'successfully got dated entry', url: req.url, data: req.body})
     }
   });
+});
+
+
+
+/********************************************
+ * HTTP GET - date entry range data         *
+ ********************************************/
+ app.get(path + "/range", function(req, res) {
+    const { date_start, date_end } = req.query;
+    const user_id = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+    const getItemsParams = {
+        TableName: tableName,
+        FilterExpression : 'user_id = :hkey AND #range BETWEEN :val1 AND :val2',
+        ProjectionExpression: "time_entry, #range, notes",
+        ExpressionAttributeNames: {
+            "#range" : "date",
+        },
+        ExpressionAttributeValues : {
+            ':hkey' : user_id,
+            ":val1" : date_start,
+            ":val2" : date_end
+        },
+        
+    };
+
+
+    function count_entry_type_intervals(entry_obj) {
+        const count_obj = {};
+        for (let time in entry_obj) {
+            if (entry_obj[time]) {
+                count_obj[entry_obj[time]] = count_obj[entry_obj[time]] + 1 || 1;
+            }
+        }
+
+        return count_obj
+    }
+
+    dynamodb.scan(getItemsParams,(err, data) => {
+      if (err) {
+        res.json({error: 'Could not load items: ' + err.message});
+      } else {
+        if (data.Items) {
+
+          // formats entries' entry_types to count 15 minute intervals
+          const formatted_items = data.Items.map(entry => {
+              entry.time_entry = count_entry_type_intervals(entry.time_entry)
+              return entry
+          })
+
+          res.json({ success: 'successfully loaded between dates', data: formatted_items });
+        } else {
+          // no entry exists for that date
+          res.json({error: 'No entry for that date'});
+        }
+      }
+    });
 });
 
 app.listen(3000, function() {
