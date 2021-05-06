@@ -146,6 +146,7 @@ app.post(path, function(req, res) {
         }
 
         return count_obj
+        // TODO: add color formatting
     }
 
     dynamodb.scan(getItemsParams,(err, data) => {
