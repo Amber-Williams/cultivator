@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^12.7.1",
     "aws-amplify": "^3.3.19",
     "bootstrap": "^5.0.0-beta3",
+    "chart.js": "^3.2.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "react": "^17.0.1",

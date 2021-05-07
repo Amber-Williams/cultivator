@@ -22,8 +22,8 @@ const TimeTracker = ({ API }) => {
     useEffect(() => {
         API.get('api', '/entry-type')
             .then(entry_types => {
-                console.log('/entry_type', entry_types)
                 set_entry_types(entry_types)
+                window.entry_types = entry_types //TODO: replace with redux
             })
             .catch(err => console.log(err))
     }, [])

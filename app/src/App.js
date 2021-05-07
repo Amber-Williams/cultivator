@@ -4,6 +4,7 @@ import { withAuthenticator } from '@aws-amplify/ui-react'
 import config from './aws-exports'
 import TimeTracker from './components/time-tracker/time-tracker'
 import SignOutButton from './components/admin/sign-out-button'
+import TimeEntryChart from './components/time-entry-chart/time-entry-chart'
 import './App.css';
 
 Amplify.configure(config)
@@ -29,6 +30,7 @@ const App = () => {
       <SignOutButton/>
       <div className="text-light">Hello, {username}</div>
       <TimeTracker API={API} />
+      <TimeEntryChart/>
     </div>
   ) : (
     <div className="spinner-border text-dark" role="status"></div>

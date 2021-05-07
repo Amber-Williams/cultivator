@@ -17,7 +17,12 @@ const DailyNotes = ({ notes, set_notes }) => {
         handle_change_debounce(event);
     }
 
-    return <textarea ref={inputRef} className="DailyNotes" onChange={handle_change}></textarea>
+    return (
+        <React.Fragment>
+            <h4 className="mt-5 text-light">Daily notes</h4>
+            <textarea ref={inputRef} className="DailyNotes" onChange={handle_change}></textarea>
+        </React.Fragment>
+    )
 }
 
 export default DailyNotes

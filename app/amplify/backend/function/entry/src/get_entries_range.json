@@ -1,12 +1,14 @@
 {
-    "httpMethod": "POST",
-    "path": "/entry",
+    "httpMethod": "GET",
+    "path": "/entry/range",
     "headers": {
         "content-type": "application/json"
     },
-    "body": "{\"date\": \"2021-05-01\", \"time_entry\": {\"1:00\": \"stuff2\"},\"notes\": \"blah blah blah\"}",
     "resource": "/{proxy+}",
-    "queryStringParameters": {},
+    "queryStringParameters": {
+        "date_start": "2021-05-01",
+        "date_end": "2021-05-07"
+    },
     "requestContext": {
         "identity": {
             "cognitoIdentityPoolId": "test_pool_id",

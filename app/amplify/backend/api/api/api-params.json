@@ -60,7 +60,7 @@
         }
     ],
     "privacy": {
-        "auth": 3,
+        "auth": 4,
         "unauth": 0,
         "authRoleName": "amplify-cultivator-dev-211631-authRole",
         "unAuthRoleName": "amplify-cultivator-dev-211631-unauthRole"
@@ -91,5 +91,5 @@
             ]
         }
     ],
-    "uuid": "e80e046e"
+    "uuid": "5db716a3"
 }

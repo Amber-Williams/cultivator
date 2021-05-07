@@ -22,7 +22,7 @@ const TypePickerItem = ({ name, color, on_click, on_remove }) => (
 
 const TypePicker = ({ set_type, entry_types, set_entry_types }) => {
     const [ new_entry, set_new_entry ] = useState(null)
-    const [ new_entry_color, set_new_entry_color ] = useState("#000000")
+    const [ entry_color, set_entry_color ] = useState("#0d6efd")
     const [ show_entry_editor, set_show_entry_editor ] = useState(false)
     const [ error, set_error ] = useState(false)
 
@@ -53,7 +53,7 @@ const TypePicker = ({ set_type, entry_types, set_entry_types }) => {
             body: {
               entry_type: {
                   name: new_entry,
-                  color: new_entry_color
+                  color: entry_color
               }
             }
         })
@@ -63,6 +63,7 @@ const TypePicker = ({ set_type, entry_types, set_entry_types }) => {
                 return
             }
             set_entry_types(data.data)
+            window.entry_types = data.data //TODO: replace with redux
             set_show_entry_editor(false)
         }).catch(err => console.log(err)) //TODO: error handling
     }
@@ -78,6 +79,7 @@ const TypePicker = ({ set_type, entry_types, set_entry_types }) => {
         })
         .then(data => {
             set_entry_types(data.data)
+            window.entry_types = data.data //TODO: replace with redux
         })
     }
 
@@ -92,8 +94,8 @@ const TypePicker = ({ set_type, entry_types, set_entry_types }) => {
             <div className="border border-white text-light">
                 { show_entry_editor 
                     ? <div className="d-flex justify-content-between align-items-center px-3"> 
-                        <input type="text" onChange={(e) => set_new_entry(e.target.value)}/>
-                        <input type="color" onChange={(e) => set_new_entry_color(e.target.value)}/>
+                        <input type="text" placeholder="Enter name" className="form-control" onChange={(e) => set_new_entry(e.target.value)}/>
+                        <input type="color" className="form-control form-control-color" value={entry_color} onChange={(e) => set_entry_color(e.target.value)}/>
                         <div onClick={on_add}>
                             <CircleArrowGoIcon width="16" height="16"/>
                         </div>
