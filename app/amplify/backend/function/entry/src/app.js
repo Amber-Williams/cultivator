@@ -115,9 +115,30 @@ app.post(path, function(req, res) {
 
 
 
+
 /********************************************
  * HTTP GET - date entry range data         *
  ********************************************/
+function count_entry_type_intervals(entry_obj) {
+    const count_obj = {};
+    for (let time in entry_obj) {
+        if (entry_obj[time]) {
+            count_obj[entry_obj[time]] = count_obj[entry_obj[time]] + 1 || 1;
+        }
+    }
+    return count_obj
+    // TODO: add color formatting
+}
+
+function enumerate_days_between_dates(start_date, end_date){
+    let date = []
+    while(moment(start_date) <= moment(end_date)){
+      date.push(start_date);
+      start_date = moment(start_date).add(1, 'days').format("YYYY-MM-DD");
+    }
+    return date;
+}
+
  app.get(path + "/range", function(req, res) {
     const { date_start, date_end } = req.query;
     const user_id = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
@@ -136,19 +157,6 @@ app.post(path, function(req, res) {
         
     };
 
-
-    function count_entry_type_intervals(entry_obj) {
-        const count_obj = {};
-        for (let time in entry_obj) {
-            if (entry_obj[time]) {
-                count_obj[entry_obj[time]] = count_obj[entry_obj[time]] + 1 || 1;
-            }
-        }
-
-        return count_obj
-        // TODO: add color formatting
-    }
-
     dynamodb.scan(getItemsParams,(err, data) => {
       if (err) {
         res.json({error: 'Could not load items: ' + err.message});
@@ -156,12 +164,14 @@ app.post(path, function(req, res) {
         if (data.Items) {
 
           // formats entries' entry_types to count 15 minute intervals
-          const formatted_items = data.Items.map(entry => {
+          const items_with_counted_intervals = data.Items.map(entry => {
               entry.time_entry = count_entry_type_intervals(entry.time_entry)
               return entry
           })
 
-          res.json({ success: 'successfully loaded between dates', data: formatted_items });
+          const date_range_list = enumerate_days_between_dates(date_start, date_end)
+
+          res.json({ success: 'successfully loaded between dates', data: items_with_counted_intervals, date_range_list});
         } else {
           // no entry exists for that date
           res.json({error: 'No entry for that date'});

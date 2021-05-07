@@ -18,7 +18,7 @@
       "function": {
         "entry": {
           "deploymentBucketName": "amplify-cultivator-dev-211631-deployment",
-          "s3Key": "amplify-builds/entry-70714d54657a78675a63-build.zip"
+          "s3Key": "amplify-builds/entry-53697250652b49464555-build.zip"
         },
         "entrytype": {
           "deploymentBucketName": "amplify-cultivator-dev-211631-deployment",

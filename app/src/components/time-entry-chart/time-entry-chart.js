@@ -7,21 +7,29 @@ import './time-entry-chart.css'
 
 Chart.register(...registerables);
 
-function format_data_for_time_entry_chart(data){
-    const labels = []
-    const datasets = []
+function format_data_for_time_entry_chart(labels, data){
+    let datasets = []
 
-    data.forEach((entry_day, i) => {
-        labels.push(entry_day.date)
+    labels.forEach((date, i) => {
+        const date_entry = data.find(entry => entry.date === date)
 
-        for(let key in entry_day.time_entry) {
+        if (!date_entry) {
+            // if no entry for given date we add nulls to existing entries 
+            datasets = datasets.map(dataset => {
+                dataset.data.push(null)
+                return dataset;
+            })
+            return;
+        }
+
+        for(let key in date_entry.time_entry) {
             const dataset = datasets.find(_dataset => _dataset.label === key) 
+            const time_hours = date_entry.time_entry[key] / 4 // time is in 15 minute intervals
 
-            const time_hours = entry_day.time_entry[key] / 4 // time is in 15 minute intervals
             if (!dataset) {
                 datasets.push({ 
                     label: key, 
-                    data: [time_hours],
+                    data: [...new Array(i).fill(null), time_hours], // if newly created entry types exist we must pad the data from previous date iterations
                     borderColor: '#' + Math.floor(Math.random()*16777215).toString(16), //TODO: use user's set colors
                     borderWidth: 1
                 })
@@ -32,9 +40,7 @@ function format_data_for_time_entry_chart(data){
         
     })
 
-    return {
-        datasets, labels
-    }
+    return  datasets
 }
 
 function TimeEntryChart() {
@@ -47,7 +53,7 @@ function TimeEntryChart() {
 
         API.get('api', `/entry/range?date_start=${date_start}&date_end=${date_end}`)
             .then(data => {
-                const {datasets, labels} = format_data_for_time_entry_chart(data.data)
+                const datasets = format_data_for_time_entry_chart(data.date_range_list, data.data)
                 
                 chart = new Chart(chart_element.current, {
                     type: 'line',
@@ -68,7 +74,7 @@ function TimeEntryChart() {
                         }
                     },
                     data: {
-                        labels,
+                        labels: data.date_range_list,
                         datasets
                     }
                 });
