@@ -6,6 +6,8 @@ import { Chart, registerables } from 'chart.js';
 import './time-entry-chart.css'
 
 Chart.register(...registerables);
+Chart.defaults.color = '#FFF';
+Chart.defaults.borderColor = '#4d4d4d';
 
 function format_data_for_time_entry_chart(labels, data){
     let datasets = []
@@ -30,8 +32,9 @@ function format_data_for_time_entry_chart(labels, data){
                 datasets.push({ 
                     label: key, 
                     data: [...new Array(i).fill(null), time_hours], // if newly created entry types exist we must pad the data from previous date iterations
-                    borderColor: '#' + Math.floor(Math.random()*16777215).toString(16), //TODO: use user's set colors
-                    borderWidth: 1
+                    borderColor: window.entry_types[key].color, // TODO: replace with redux
+                    borderWidth: 1,
+                    color: 'red'
                 })
             } else {
                 dataset.data.push(time_hours) 

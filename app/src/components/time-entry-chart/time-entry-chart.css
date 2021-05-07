@@ -1,4 +1,5 @@
 .TimeEntryChart .chart-container {
-    width: 400px;
+    width: calc(100vh - 4rem);
     height: 400px;
+    margin: 0 2rem;
 }
