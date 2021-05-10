@@ -32,12 +32,16 @@ function format_data_for_time_entry_chart(labels, data){
                 datasets.push({ 
                     label: key, 
                     data: [...new Array(i).fill(null), time_hours], // if newly created entry types exist we must pad the data from previous date iterations
-                    borderColor: window.entry_types[key].color, // TODO: replace with redux
+                    borderColor: window.entry_types[key].color || "blue", // TODO: replace with redux
                     borderWidth: 1,
-                    color: 'red'
                 })
             } else {
-                dataset.data.push(time_hours) 
+                if (dataset.data.length - 1 === i)
+                    dataset.data.push(time_hours) 
+                else {
+                    const fill_missing_values_difference = i - dataset.data.length;
+                    dataset.data.push(...[...new Array(fill_missing_values_difference).fill(null), time_hours]) // pads the data from previous date iterations
+                }
             }
         }
         
@@ -60,15 +64,17 @@ function TimeEntryChart() {
                 
                 chart = new Chart(chart_element.current, {
                     type: 'line',
+                    data: {
+                        labels: data.date_range_list,
+                        datasets
+                    },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         scales: {
-                            xAxes: [{
-                                type: 'time',
-                            }],
                             y: {
-                                display: true,
+                                type: 'linear',
+                                beginAtZero: true,
                                 title: {
                                     display: true,
                                     text: 'Hours'
@@ -76,10 +82,7 @@ function TimeEntryChart() {
                             }
                         }
                     },
-                    data: {
-                        labels: data.date_range_list,
-                        datasets
-                    }
+                    
                 });
             })
 
