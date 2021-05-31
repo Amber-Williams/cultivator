@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useSelector } from 'react-redux'
 import { API } from 'aws-amplify'
-import DatePicker from './../date-picker/date-picker'
 import moment from 'moment'
+
+import DatePicker from './../date-picker/date-picker'
 import { Chart, registerables } from 'chart.js';
 import './time-entry-chart.css'
 
@@ -9,7 +11,7 @@ Chart.register(...registerables);
 Chart.defaults.color = '#FFF';
 Chart.defaults.borderColor = '#4d4d4d';
 
-function format_data_for_time_entry_chart(labels, data){
+function format_data_for_time_entry_chart(labels, data, entry_types){
     let datasets = []
 
     labels.forEach((date, i) => {
@@ -24,7 +26,7 @@ function format_data_for_time_entry_chart(labels, data){
             return;
         }
 
-        for(let key in date_entry.time_entry) {
+        for (let key in date_entry.time_entry) {
             const dataset = datasets.find(_dataset => _dataset.label === key) 
             const time_hours = date_entry.time_entry[key] / 4 // time is in 15 minute intervals
 
@@ -32,7 +34,7 @@ function format_data_for_time_entry_chart(labels, data){
                 datasets.push({ 
                     label: key, 
                     data: [...new Array(i).fill(null), time_hours], // if newly created entry types exist we must pad the data from previous date iterations
-                    borderColor: window.entry_types && window.entry_types[key] ? window.entry_types[key].color : "blue", // TODO: replace with redux
+                    borderColor: entry_types && entry_types[key] ? entry_types[key].color : "#ff4c5f",
                     borderWidth: 1,
                 })
             } else {
@@ -51,6 +53,8 @@ function format_data_for_time_entry_chart(labels, data){
 }
 
 function TimeEntryChart() {
+    const entry_types = useSelector((state) => state.entry_types.value)
+
     const chart_element = useRef(null);
     const [date_start, set_date_start] = useState(moment().subtract(7, "days").format('YYYY-MM-DD')) 
     const [date_end, set_date_end] = useState(moment().format('YYYY-MM-DD'))
@@ -60,7 +64,7 @@ function TimeEntryChart() {
 
         API.get('api', `/entry/range?date_start=${date_start}&date_end=${date_end}`)
             .then(data => {
-                const datasets = format_data_for_time_entry_chart(data.date_range_list, data.data)
+                const datasets = format_data_for_time_entry_chart(data.date_range_list, data.data, entry_types)
                 
                 chart = new Chart(chart_element.current, {
                     type: 'line',
