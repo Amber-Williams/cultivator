@@ -1,9 +1,15 @@
 import React, { useState } from 'react'
+
+import { useSelector, useDispatch } from 'react-redux'
+import { set_entry_types } from './../time-tracker/entry-types-slice'
+
 import { invert_color } from '../../utilities/style'
 import { API } from 'aws-amplify'
+
 import CirclePlusIcon from '../../images/icons/circle-plus'
 import CircleMinusIcon from '../../images/icons/circle-minus'
 import CircleArrowGoIcon from '../../images/icons/circle-arrow-go'
+
 import "./type-picker.css"
 
 const TypePickerItem = ({ name, color, on_click, on_remove }) => (
@@ -20,7 +26,10 @@ const TypePickerItem = ({ name, color, on_click, on_remove }) => (
     </div>
 )
 
-const TypePicker = ({ set_type, entry_types, set_entry_types }) => {
+const TypePicker = ({ set_type }) => {
+    const entry_types = useSelector((state) => state.entry_types.value)
+    const dispatch = useDispatch()
+
     const [ new_entry, set_new_entry ] = useState(null)
     const [ entry_color, set_entry_color ] = useState("#0d6efd")
     const [ show_entry_editor, set_show_entry_editor ] = useState(false)
@@ -62,8 +71,7 @@ const TypePicker = ({ set_type, entry_types, set_entry_types }) => {
                 set_error(data.error);
                 return
             }
-            set_entry_types(data.data)
-            window.entry_types = data.data //TODO: replace with redux
+            dispatch(set_entry_types(data.data))
             set_show_entry_editor(false)
         }).catch(err => console.log(err)) //TODO: error handling
     }
@@ -78,8 +86,7 @@ const TypePicker = ({ set_type, entry_types, set_entry_types }) => {
             }
         })
         .then(data => {
-            set_entry_types(data.data)
-            window.entry_types = data.data //TODO: replace with redux
+            dispatch(set_entry_types(data.data))
         })
     }
 

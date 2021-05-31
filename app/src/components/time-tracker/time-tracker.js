@@ -1,20 +1,26 @@
 import React, { useRef, useState, useEffect } from 'react'
+import moment from 'moment'
+import _ from 'lodash';
+
+import { useSelector, useDispatch } from 'react-redux'
+import { set_entry_types } from './entry-types-slice'
+
 import { times } from './../../utilities/times'
 import TypePicker from '../type-picker/type-picker'
 import DatePicker from './../date-picker/date-picker'
 import DayTable from './day-table'
-import moment from 'moment'
-import _ from 'lodash';
 import DailyNotes from './daily-notes'
 
 const TimeTracker = ({ API }) => {
+    const entry_types = useSelector((state) => state.entry_types.value)
+    const dispatch = useDispatch()
+
     const [type, set_type] = useState('work')
     const [time_entry, set_time_entry] = useState(null)
     const [notes, set_notes] = useState(null)
     const [loading, set_loading] = useState(true)
     const [api_loading, set_api_loading] = useState(false)
     const [date, set_date] = useState(moment().format('YYYY-MM-DD'))
-    const [entry_types, set_entry_types] = useState(null)
 
     const stateRef = useRef();
     stateRef.current = { date, time_entry, notes }; // gets current state outside of api scope
@@ -22,8 +28,7 @@ const TimeTracker = ({ API }) => {
     useEffect(() => {
         API.get('api', '/entry-type')
             .then(entry_types => {
-                set_entry_types(entry_types)
-                window.entry_types = entry_types //TODO: replace with redux
+                dispatch(set_entry_types(entry_types))
             })
             .catch(err => console.log(err))
     }, [])
@@ -104,7 +109,7 @@ const TimeTracker = ({ API }) => {
       return (
         <div className="TimeTracker">
             <DatePicker date={date} set_date={set_date} />
-            <TypePicker set_type={set_type} entry_types={entry_types} set_entry_types={set_entry_types}/>
+            <TypePicker set_type={set_type} />
             <DayTable type={type} update_time_entry={update_time_entry} time_entry={time_entry} entry_types={entry_types}/>
             <DailyNotes set_notes={set_notes} notes={notes}/>
         </div>
