@@ -32,7 +32,7 @@ function format_data_for_time_entry_chart(labels, data){
                 datasets.push({ 
                     label: key, 
                     data: [...new Array(i).fill(null), time_hours], // if newly created entry types exist we must pad the data from previous date iterations
-                    borderColor: window.entry_types[key].color || "blue", // TODO: replace with redux
+                    borderColor: window.entry_types && window.entry_types[key] ? window.entry_types[key].color : "blue", // TODO: replace with redux
                     borderWidth: 1,
                 })
             } else {
