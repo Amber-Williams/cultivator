@@ -5,7 +5,7 @@ import config from './aws-exports'
 import TimeTracker from './components/time-tracker/time-tracker'
 import SignOutButton from './components/admin/sign-out-button'
 import TimeEntryChart from './components/time-entry-chart/time-entry-chart'
-import './App.css';
+import './App.scss';
 
 Amplify.configure(config)
 

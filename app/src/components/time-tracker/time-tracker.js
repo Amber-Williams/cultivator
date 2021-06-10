@@ -65,6 +65,17 @@ const TimeTracker = ({ API }) => {
         send_entry()
     }
 
+    const update_hour_entry = async (hour, type) => {
+        if (loading) return;
+        const time_entry_copy = JSON.parse(JSON.stringify(time_entry))
+        time_entry_copy[hour + ':00'] = type ? type : null
+        time_entry_copy[hour + ':15'] = type ? type : null
+        time_entry_copy[hour + ':30'] = type ? type : null
+        time_entry_copy[hour + ':45'] = type ? type : null
+        await set_time_entry(time_entry_copy)
+        send_entry()
+    }
+
     const send_entry = async () => {
       if (!api_loading) {
         set_api_loading(true)
@@ -110,7 +121,7 @@ const TimeTracker = ({ API }) => {
         <div className="TimeTracker">
             <DatePicker date={date} set_date={set_date} />
             <TypePicker set_type={set_type} />
-            <DayTable type={type} update_time_entry={update_time_entry} time_entry={time_entry} entry_types={entry_types}/>
+            <DayTable type={type} update_time_entry={update_time_entry} update_hour_entry={update_hour_entry} time_entry={time_entry} entry_types={entry_types}/>
             <DailyNotes set_notes={set_notes} notes={notes}/>
         </div>
       )
