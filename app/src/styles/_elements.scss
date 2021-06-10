@@ -1,7 +1,7 @@
 @import '_colors.scss';
 
 
-@mixin focused-glow-border($color) {
+@mixin focused-glow-border($color, $background-color) {
     @keyframes fade-in-out {
         0% { 
             box-shadow: 0 0 5px 0px $color;
@@ -21,6 +21,7 @@
         box-shadow: 0 0 5px 2px $color;
         outline: none;
         animation: fade-in-out 3s linear infinite;
+        background-color: $background-color;
     }
 }
 
@@ -28,7 +29,12 @@
     border: 1px solid $c-light-dark;
     border-radius: 0.5rem;
     background: $c-dark;
+    background-color: $c-dark;
     padding: 5px 10px;
     color: $c-white;
-    @include focused-glow-border($color: $c-accent);
+    @include focused-glow-border($color: $c-accent, $background-color: $c-dark);
+
+    &:focus {
+        color: $c-white;
+    }
 }

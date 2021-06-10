@@ -10,7 +10,7 @@ import CirclePlusIcon from '../../images/icons/circle-plus'
 import CircleMinusIcon from '../../images/icons/circle-minus'
 import CircleArrowGoIcon from '../../images/icons/circle-arrow-go'
 
-import "./type-picker.css"
+import "./type-picker.scss"
 
 const TypePickerItem = ({ name, color, on_click, on_remove }) => (
     <div onClick={(e) => on_click(e, name, color)}
@@ -98,16 +98,16 @@ const TypePicker = ({ set_type }) => {
                         : null
                 }
             </div>
-            <div className="border border-white text-light">
+            <div>
                 { show_entry_editor 
-                    ? <div className="d-flex justify-content-between align-items-center px-3"> 
-                        <input type="text" placeholder="Enter name" className="form-control" onChange={(e) => set_new_entry(e.target.value)}/>
-                        <input type="color" className="form-control form-control-color" value={entry_color} onChange={(e) => set_entry_color(e.target.value)}/>
-                        <div onClick={on_add}>
+                    ? <div className="d-flex justify-content-between align-items-center"> 
+                        <input type="text" placeholder="Enter name" className="TypePicker__entry-input form-control" onChange={(e) => set_new_entry(e.target.value)}/>
+                        <input type="color" className="TypePicker__color-input form-control form-control-color" value={entry_color} onChange={(e) => set_entry_color(e.target.value)}/>
+                        <div onClick={on_add} className="text-light">
                             <CircleArrowGoIcon width="16" height="16"/>
                         </div>
-                        </div>
-                    : <div onClick={() => set_show_entry_editor(true)} className="d-flex justify-content-between align-items-center px-3">
+                      </div>
+                    : <div onClick={() => set_show_entry_editor(true)} className="TypePicker__add-button d-flex justify-content-between align-items-center px-3">
                         <p className="m-0"> Add entry type</p>
                         <CirclePlusIcon width="16" height="16"/>
                       </div>
