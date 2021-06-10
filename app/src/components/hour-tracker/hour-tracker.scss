@@ -1,16 +1,48 @@
+@import './../../styles/style.scss';
+
 .HourTracker {
     margin: 1rem 0.5rem;
+    font-family: 'HelveticaNeue-Light';
+}
 
+.HourTracker__main {
+    color: white;
+    background-color: $c-dark;
+    height: 100%;
+    margin: 0;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+    width: 10rem;
+    
+    h4 {
+        font-size: 4rem;
+        pointer-events: none;
+    }
+
+    p {
+        font-size: 1.5rem;
+        font-weight: 300;
+        pointer-events: none;
+    }
 }
 
 .Interval {
     font-size: 1rem;
-    width: 30px;
-    border: 1px solid black;
+    width: 100%;
+    border-bottom: 1px solid $c-darkest;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    padding: 0px 13px;
     color: black;
+    position: relative;
+    height: 100%;
+
+    p {
+        font-size: 1.3rem;
+        margin-top: -6px;
+        margin-bottom: -6px;
+        font-size: 1.7rem;
+        pointer-events: none;
+    }
 }
 
-.Interval--main {
-    font-weight: bold;
-    font-size: 1.3rem;
-}

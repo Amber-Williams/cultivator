@@ -4,11 +4,9 @@ import "./hour-tracker.scss"
 
 const Interval = ({ index, main, type, update_time_entry, time_entry, entry_types }) => {
     const [ style, set_style ] = useState(null)
-    if (main === 24){
-        main = '0'
-    }
-    const interval_naming = [main, '15', '30', '45']
-    const id = `${main}:${index === 0 ? '00': interval_naming[index]}`
+
+    const interval_naming = ['00', '15', '30', '45']
+    const id = `${main}:${interval_naming[index]}`
 
     function set_empty(){
         set_style({
@@ -16,6 +14,7 @@ const Interval = ({ index, main, type, update_time_entry, time_entry, entry_type
             color: invert_color('#FFFFFF', true)
         })
     }
+
     useEffect(() => {
         set_empty()
     }, [])
@@ -41,20 +40,34 @@ const Interval = ({ index, main, type, update_time_entry, time_entry, entry_type
                 onClick={select}
                 onMouseDown={select}
                 style={style}
-                className={index === 0 ? 'Interval Interval--main' : 'Interval'}>
-                    {interval_naming[index]}
+                className={'Interval'}>
+                    <p>:{interval_naming[index]}</p>
             </div>
 }
 
-const HourTracker = ({ index, type, update_time_entry, time_entry, entry_types }) => (
-    <div className="HourTracker d-flex">
-        {[...Array(4)].map((_, i) =>  <Interval key={i} 
-                                                index={i} main={index + 1} 
-                                                type={type} 
-                                                update_time_entry={update_time_entry} t
-                                                time_entry={time_entry}
-                                                entry_types={entry_types}/> )}
-    </div>
+const HourTracker = ({ main, type, update_time_entry, update_hour_entry, time_entry, entry_types }) => {
+    function select(e) {
+        type.name === 'none' ? update_hour_entry(e.target.id, null) :  update_hour_entry(e.target.id, type.name)
+    }
+
+    return (
+        <div className="HourTracker d-flex align-items-center justify-content-center">
+            <div className="HourTracker__main" id={main} onClick={select}>
+                <h4>{main % 12 === 0 ? '12' : main % 12 }</h4>
+                <p>{main < 12 || main === 0 ? 'A.M.' : 'P.M'}</p>
+            </div>
+            
+            <div className="d-flex flex-column align-items-center h-100">
+            {[...Array(4)].map((_, i) =>  <Interval key={i} 
+                                                    index={i} 
+                                                    main={main} 
+                                                    type={type} 
+                                                    update_time_entry={update_time_entry}
+                                                    time_entry={time_entry}
+                                                    entry_types={entry_types}/> )}
+            </div>
+        </div>
 )
+}
 
 export default HourTracker

@@ -15,8 +15,9 @@
 .DayTable {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: auto;
     margin-top: 150px;
+    max-width: 1200px;
+    margin: 150px auto 0 auto;
 }
 
 .DailyNotes {
@@ -27,4 +28,5 @@
     border: $c-white 1px solid;
     color: $c-white;
     padding: 1rem;
+    max-width: 1200px;
 }
