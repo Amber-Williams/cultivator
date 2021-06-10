@@ -20,6 +20,10 @@
     "react-scripts": "4.0.2",
     "web-vitals": "^1.1.0"
   },
+  "devDependencies": {
+    "node-sass": "^6.0.0",
+    "sass-loader": "^10.1.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
