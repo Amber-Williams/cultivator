@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import _ from 'lodash';
-import './time-tracker.css'
+import './time-tracker.scss'
 
 const DailyNotes = ({ notes, set_notes }) => {
     const inputRef = useRef();

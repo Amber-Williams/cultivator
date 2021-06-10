@@ -1,3 +1,5 @@
+@import '../../styles/style.scss';
+
 .TimeTracker {
     margin: 3rem;
 }
@@ -17,28 +19,12 @@
     margin-top: 150px;
 }
 
-.DayTable .Hour {
-    margin: 1rem 0.5rem;
-
-}
-
-.Interval {
-    font-size: 1rem;
-    width: 30px;
-    border: 1px solid black;
-    color: black;
-}
-
-.Interval--main {
-    font-weight: bold;
-    font-size: 1.3rem;
-}
-
 .DailyNotes {
+    @include text-input;
     width: calc(100% - 4rem);
     margin: 2rem;
-    background: transparent;
-    border: white 1px solid;
-    color: white;
+    background: $c-dark;
+    border: $c-white 1px solid;
+    color: $c-white;
     padding: 1rem;
 }
