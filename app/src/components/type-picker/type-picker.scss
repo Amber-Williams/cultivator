@@ -7,19 +7,19 @@
 
 .TypePicker .TypePicker {
     &__entry-input {
-        @include text-input;
+        @include input;
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
     }
 
     &__color-input {
-        @include text-input;
+        @include input;
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
         border-left: 0;
         padding: 4px 10px;
     }
     &__add-button {
-        @include text-input;
+        @include input;
     }
 }

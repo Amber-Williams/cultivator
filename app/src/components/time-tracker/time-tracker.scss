@@ -15,13 +15,14 @@
 .DayTable {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    grid-gap: 2%;
     margin-top: 150px;
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 150px auto 0 auto;
 }
 
 .DailyNotes {
-    @include text-input;
+    @include input;
     width: calc(100% - 4rem);
     margin: 2rem;
     background: $c-dark;
