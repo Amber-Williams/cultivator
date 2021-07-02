@@ -1,4 +1,5 @@
 import React from 'react'
+import './date-picker.scss'
 
 const DatePicker = ({ set_date, date }) => {
     function on_change(e) {
@@ -7,7 +8,7 @@ const DatePicker = ({ set_date, date }) => {
     }
   
     return (
-        <input type="date" value={date} onChange={on_change}/>
+        <input className="DatePicker" type="date" value={date} onChange={on_change}/>
     )
 }
 

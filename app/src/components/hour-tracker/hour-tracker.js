@@ -40,7 +40,7 @@ const Interval = ({ index, main, type, update_time_entry, time_entry, entry_type
                 onClick={select}
                 onMouseDown={select}
                 style={style}
-                className={'Interval'}>
+                className={`Interval ${index === 3 ? 'Interval--last': ''}`}>
                     <p>:{interval_naming[index]}</p>
             </div>
 }
@@ -54,7 +54,7 @@ const HourTracker = ({ main, type, update_time_entry, update_hour_entry, time_en
         <div className="HourTracker d-flex align-items-center justify-content-center">
             <div className="HourTracker__main" id={main} onClick={select}>
                 <h4>{main % 12 === 0 ? '12' : main % 12 }</h4>
-                <p>{main < 12 || main === 0 ? 'A.M.' : 'P.M'}</p>
+                <p>{main < 12 || main === 0 ? 'A.M.' : 'P.M.'}</p>
             </div>
             
             <div className="d-flex flex-column align-items-center h-100">
