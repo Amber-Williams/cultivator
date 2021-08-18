@@ -1,0 +1,33 @@
+@import '../../styles/style.scss';
+
+.TimeTracker {
+    margin: 3rem;
+}
+
+.TypePicker {
+    width: 100%;
+    max-width: 300px;
+    position: absolute;
+    top: 0;
+    left:0;
+}
+
+.DayTable {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 2%;
+    margin-top: 150px;
+    max-width: 1000px;
+    margin: 150px auto 150px auto;
+}
+
+.DailyNotes {
+    @include input;
+    width: calc(100% - 4rem);
+    margin: 2rem;
+    background: $c-dark;
+    border: $c-white 1px solid;
+    color: $c-white;
+    padding: 1rem;
+    max-width: 1200px;
+}

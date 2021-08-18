@@ -8,7 +8,7 @@
     }
   },
   "function": {
-    "userfunction": {
+    "entry": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
@@ -27,7 +27,7 @@
         }
       ]
     },
-    "entryfunction": {
+    "entrytype": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
@@ -46,7 +46,7 @@
         }
       ]
     },
-    "entrytypefunction": {
+    "login": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
@@ -73,13 +73,13 @@
     }
   },
   "api": {
-    "userapi": {
+    "api": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "userfunction",
+          "resourceName": "entry",
           "attributes": [
             "Name",
             "Arn"
@@ -87,7 +87,7 @@
         },
         {
           "category": "function",
-          "resourceName": "entryfunction",
+          "resourceName": "entrytype",
           "attributes": [
             "Name",
             "Arn"
@@ -95,7 +95,7 @@
         },
         {
           "category": "function",
-          "resourceName": "entrytypefunction",
+          "resourceName": "login",
           "attributes": [
             "Name",
             "Arn"

@@ -16,17 +16,17 @@
         "cultivator642dce55": {}
       },
       "function": {
-        "userfunction": {
+        "entry": {
           "deploymentBucketName": "amplify-cultivator-dev-211631-deployment",
-          "s3Key": "amplify-builds/userfunction-694d5a4836706f45744d-build.zip"
+          "s3Key": "amplify-builds/entry-53697250652b49464555-build.zip"
         },
-        "entryfunction": {
+        "entrytype": {
           "deploymentBucketName": "amplify-cultivator-dev-211631-deployment",
-          "s3Key": "amplify-builds/entryfunction-58784f5265647849366f-build.zip"
+          "s3Key": "amplify-builds/entrytype-75614c494d6a31457439-build.zip"
         },
-        "entrytypefunction": {
+        "login": {
           "deploymentBucketName": "amplify-cultivator-dev-211631-deployment",
-          "s3Key": "amplify-builds/entrytypefunction-4d5479577232426a546c-build.zip"
+          "s3Key": "amplify-builds/login-50304666436266574232-build.zip"
         }
       }
     }

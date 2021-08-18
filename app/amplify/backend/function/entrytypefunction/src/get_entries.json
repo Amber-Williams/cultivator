@@ -1,5 +1,0 @@
-{
-    "httpMethod": "GET",
-    "path": "/entry-type",
-    "queryStringParameters": {"_id": "test2"}
-}

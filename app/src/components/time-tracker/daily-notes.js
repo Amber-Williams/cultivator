@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import _ from 'lodash';
-import './time-tracker.css'
+import './time-tracker.scss'
 
 const DailyNotes = ({ notes, set_notes }) => {
     const inputRef = useRef();
@@ -17,7 +17,12 @@ const DailyNotes = ({ notes, set_notes }) => {
         handle_change_debounce(event);
     }
 
-    return <textarea ref={inputRef} className="DailyNotes" onChange={handle_change}></textarea>
+    return (
+        <React.Fragment>
+            <h4 className="mt-5 text-light">Daily notes</h4>
+            <textarea ref={inputRef} className="DailyNotes" onChange={handle_change}></textarea>
+        </React.Fragment>
+    )
 }
 
 export default DailyNotes
