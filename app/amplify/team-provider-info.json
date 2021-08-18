@@ -30,5 +30,37 @@
         }
       }
     }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cultivator-prod-215340-authRole",
+      "UnauthRoleArn": "arn:aws:iam::838197045453:role/amplify-cultivator-prod-215340-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::838197045453:role/amplify-cultivator-prod-215340-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-cultivator-prod-215340-deployment",
+      "UnauthRoleName": "amplify-cultivator-prod-215340-unauthRole",
+      "StackName": "amplify-cultivator-prod-215340",
+      "StackId": "arn:aws:cloudformation:eu-west-2:838197045453:stack/amplify-cultivator-prod-215340/622f6460-0066-11ec-8630-02bc91562292",
+      "AmplifyAppId": "d34awydnyxufe7"
+    },
+    "categories": {
+      "auth": {
+        "cultivator642dce55": {}
+      },
+      "function": {
+        "entry": {
+          "deploymentBucketName": "amplify-cultivator-prod-215340-deployment",
+          "s3Key": "amplify-builds/entry-53697250652b49464555-build.zip"
+        },
+        "entrytype": {
+          "deploymentBucketName": "amplify-cultivator-prod-215340-deployment",
+          "s3Key": "amplify-builds/entrytype-75614c494d6a31457439-build.zip"
+        },
+        "login": {
+          "deploymentBucketName": "amplify-cultivator-prod-215340-deployment",
+          "s3Key": "amplify-builds/login-50304666436266574232-build.zip"
+        }
+      }
+    }
   }
 }
