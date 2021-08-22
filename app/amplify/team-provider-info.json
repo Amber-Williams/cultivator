@@ -108,13 +108,22 @@
       "AmplifyAppId": "d28oa2cl6alh4r"
     },
     "categories": {
-      "auth": {
-        "cultivator642dce55": {}
-      },
       "function": {
-        "entry": {},
-        "entrytype": {},
-        "login": {}
+        "entry": {
+          "deploymentBucketName": "amplify-cultivator-live-201455-deployment",
+          "s3Key": "amplify-builds/entry-53697250652b49464555-build.zip"
+        },
+        "entrytype": {
+          "deploymentBucketName": "amplify-cultivator-live-201455-deployment",
+          "s3Key": "amplify-builds/entrytype-75614c494d6a31457439-build.zip"
+        },
+        "login": {
+          "deploymentBucketName": "amplify-cultivator-live-201455-deployment",
+          "s3Key": "amplify-builds/login-50304666436266574232-build.zip"
+        }
+      },
+      "auth": {
+        "cultivator31376581": {}
       }
     }
   }
