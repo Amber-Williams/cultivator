@@ -62,5 +62,60 @@
         }
       }
     }
+  },
+  "production": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cultivator-production-193116-authRole",
+      "UnauthRoleArn": "arn:aws:iam::838197045453:role/amplify-cultivator-production-193116-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::838197045453:role/amplify-cultivator-production-193116-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-cultivator-production-193116-deployment",
+      "UnauthRoleName": "amplify-cultivator-production-193116-unauthRole",
+      "StackName": "amplify-cultivator-production-193116",
+      "StackId": "arn:aws:cloudformation:eu-west-2:838197045453:stack/amplify-cultivator-production-193116/28a50e20-0377-11ec-bcd1-0295039693e0",
+      "AmplifyAppId": "d3c4mvi82wpse4"
+    },
+    "categories": {
+      "auth": {
+        "cultivator642dce55": {}
+      },
+      "function": {
+        "entry": {
+          "deploymentBucketName": "amplify-cultivator-production-193116-deployment",
+          "s3Key": "amplify-builds/entry-53697250652b49464555-build.zip"
+        },
+        "entrytype": {
+          "deploymentBucketName": "amplify-cultivator-production-193116-deployment",
+          "s3Key": "amplify-builds/entrytype-75614c494d6a31457439-build.zip"
+        },
+        "login": {
+          "deploymentBucketName": "amplify-cultivator-production-193116-deployment",
+          "s3Key": "amplify-builds/login-50304666436266574232-build.zip"
+        }
+      }
+    }
+  },
+  "live": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cultivator-live-201455-authRole",
+      "UnauthRoleArn": "arn:aws:iam::838197045453:role/amplify-cultivator-live-201455-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::838197045453:role/amplify-cultivator-live-201455-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-cultivator-live-201455-deployment",
+      "UnauthRoleName": "amplify-cultivator-live-201455-unauthRole",
+      "StackName": "amplify-cultivator-live-201455",
+      "StackId": "arn:aws:cloudformation:eu-west-2:838197045453:stack/amplify-cultivator-live-201455/41e932c0-037d-11ec-8912-0a93f1e43702",
+      "AmplifyAppId": "d28oa2cl6alh4r"
+    },
+    "categories": {
+      "auth": {
+        "cultivator642dce55": {}
+      },
+      "function": {
+        "entry": {},
+        "entrytype": {},
+        "login": {}
+      }
+    }
   }
 }
