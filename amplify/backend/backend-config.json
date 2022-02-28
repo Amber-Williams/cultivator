@@ -1,6 +1,6 @@
 {
   "auth": {
-    "cultivator642dce55": {
+    "cultivator31376581": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
