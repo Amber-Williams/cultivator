@@ -11,7 +11,7 @@ frontend:
         - amplifyPush --simple
         - npm run build
   artifacts:
-    baseDirectory: /app/build
+    baseDirectory: /build
     files:
       - '**/*'
   cache:
