@@ -25,3 +25,6 @@ amplifytools.xcconfig
 # Amplify
 amplify/team-provider-info.json
 amplify/README.md
+
+# Nextjs
+.next/
