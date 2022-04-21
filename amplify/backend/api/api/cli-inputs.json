@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "paths": {
+    "/entry": {
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      },
+      "lambdaFunction": "entry"
+    },
+    "/entry-type": {
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      },
+      "lambdaFunction": "entrytype"
+    },
+    "/login": {
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      },
+      "lambdaFunction": "login"
+    }
+  }
+}
