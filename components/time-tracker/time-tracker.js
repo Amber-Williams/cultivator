@@ -9,6 +9,7 @@ import TypePicker from "../type-picker/type-picker";
 import DatePicker from "./../date-picker/date-picker";
 import DayTable from "./day-table";
 import DailyNotes from "./daily-notes";
+import styles from "./time-tracker.module.scss";
 
 const TimeTracker = ({ API }) => {
   const entry_types = useSelector((state) => state.entry_types.value);
@@ -123,7 +124,7 @@ const TimeTracker = ({ API }) => {
 
   if (!loading && entry_types) {
     return (
-      <div className="TimeTracker">
+      <div className={styles.TimeTracker}>
         <DatePicker date={date} set_date={set_date} />
         <TypePicker set_type={set_type} />
         <DayTable

@@ -58,7 +58,7 @@ Chart.register(
 );
 
 import DatePicker from "./../date-picker/date-picker";
-import "./time-entry-chart.module.scss";
+import styles from "./time-entry-chart.module.scss";
 
 Chart.defaults.color = "#FFF";
 Chart.defaults.borderColor = "#4d4d4d";
@@ -161,7 +161,9 @@ function TimeEntryChart() {
   }, [date_start, date_end]);
 
   return (
-    <div className="TimeEntryChart text-light d-flex flex-column align-items-center mb-5">
+    <div
+      className={`${styles.TimeEntryChart} text-light d-flex flex-column align-items-center mb-5`}
+    >
       <h4>Entry Data</h4>
       <div className="d-flex my-3">
         <div>

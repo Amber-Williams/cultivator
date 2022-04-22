@@ -1,9 +1,9 @@
 import React from "react";
 import { AmplifySignOut } from "@aws-amplify/ui-react";
-import "./admin.module.scss";
+import styles from "./admin.module.scss";
 
 const SignOutButton = () => (
-  <div className="SignOutButton">
+  <div className={styles.SignOutButton}>
     <AmplifySignOut />
   </div>
 );

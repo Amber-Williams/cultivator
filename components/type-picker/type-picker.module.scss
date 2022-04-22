@@ -1,25 +1,31 @@
 @import '../../styles/theme.scss';
 
-.TypePicker__entries {
+.TypePicker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    min-width: 300px;
+}
+
+.TypePickerEntries {
     max-height: 150px;
     overflow-y: auto;
 }
 
-.TypePicker .TypePicker {
-    &__entry-input {
-        @include input;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-    }
+.TypePickerEntryInput {
+    @include input;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
 
-    &__color-input {
-        @include input;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-        border-left: 0;
-        padding: 4px 10px;
-    }
-    &__add-button {
-        @include input;
-    }
+.TypePickerColorInput {
+    @include input;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
+    padding: 4px 10px;
+}
+
+.TypePickerAddButton {
+    @include input;
 }

@@ -7,7 +7,7 @@ import { invert_color } from "./../../utils/style";
 import CirclePlusIcon from "./../svgs/circle-plus";
 import CircleMinusIcon from "./../svgs/circle-minus";
 import CircleArrowGoIcon from "./../svgs/circle-arrow-go";
-import "./type-picker.module.scss";
+import styles from "./type-picker.module.scss";
 
 const TypePickerItem = ({ name, color, on_click, on_remove }) => (
   <div
@@ -90,8 +90,8 @@ const TypePicker = ({ set_type }) => {
   }
 
   return (
-    <div className="TypePicker">
-      <div className="TypePicker__entries">
+    <div className={styles.TypePicker}>
+      <div className={styles.TypePickerEntries}>
         {entry_types
           ? Object.entries(entry_types).map((type, i) => (
               <TypePickerItem
@@ -110,12 +110,12 @@ const TypePicker = ({ set_type }) => {
             <input
               type="text"
               placeholder="Enter name"
-              className="TypePicker__entry-input form-control"
+              className={`${styles.TypePickerEntryInput} form-control`}
               onChange={(e) => set_new_entry(e.target.value)}
             />
             <input
               type="color"
-              className="TypePicker__color-input form-control form-control-color"
+              className={`${styles.TypePickerColorInput} form-control form-control-color`}
               value={entry_color}
               onChange={(e) => set_entry_color(e.target.value)}
             />
@@ -126,9 +126,8 @@ const TypePicker = ({ set_type }) => {
         ) : (
           <div
             onClick={() => set_show_entry_editor(true)}
-            className="TypePicker__add-button d-flex justify-content-between align-items-center px-3"
+            className={`${styles.TypePickerAddButton} d-flex justify-content-between align-items-center px-3`}
           >
-            <p className="m-0"> Add entry type</p>
             <CirclePlusIcon width="16" height="16" />
           </div>
         )}

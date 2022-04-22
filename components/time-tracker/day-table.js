@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import HourTracker from "./../hour-tracker/hour-tracker";
 import SunIcon from "./../svgs/sun";
 import MoonIcon from "./../svgs/moon";
-
 import styles from "./time-tracker.module.scss";
 
 const DayTable = ({
@@ -19,18 +18,18 @@ const DayTable = ({
   return (
     <div className={styles.DayTable}>
       <div
-        className="d-flex justify-content-end form-check form-switch"
+        class="d-flex justify-content-end form-check form-switch"
         onClick={() => setIsAM(!isAM)}
       >
-        <p className="text-light">
+        <p class="text-light">
           <SunIcon />
         </p>
         <input
-          className={`${styles.DayTableSwitch} form-check-input`}
+          class={`${styles.DayTableSwitch} form-check-input`}
           type="checkbox"
           checked={isAM}
         />
-        <p className="text-light">
+        <p class="text-light">
           <MoonIcon />
         </p>
       </div>

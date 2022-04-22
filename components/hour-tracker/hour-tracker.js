@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { invert_color } from "./../../utils/style";
-import "./hour-tracker.module.scss";
+import styles from "./hour-tracker.module.scss";
 
 const Interval = ({
   index,
@@ -51,7 +51,9 @@ const Interval = ({
       onClick={select}
       onMouseDown={select}
       style={style}
-      className={`Interval ${index === 3 ? "Interval--last" : ""}`}
+      className={`${styles.Interval} ${
+        index === 3 ? styles.IntervalLastItem : ""
+      }`}
     >
       <p>:{interval_naming[index]}</p>
     </div>
@@ -73,8 +75,10 @@ const HourTracker = ({
   }
 
   return (
-    <div className="HourTracker d-flex align-items-center justify-content-center">
-      <div className="HourTracker__main" id={main} onClick={select}>
+    <div
+      className={`${styles.HourTracker} d-flex align-items-center justify-content-center`}
+    >
+      <div className={styles.HourTrackerMain} id={main} onClick={select}>
         <h4>{main % 12 === 0 ? "12" : main % 12}</h4>
         <p>{main < 12 || main === 0 ? "A.M." : "P.M."}</p>
       </div>
