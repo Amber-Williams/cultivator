@@ -1,26 +1,30 @@
 import Head from "next/head";
-
 import { useState, useEffect } from "react";
 import Amplify, { API, Auth } from "aws-amplify";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 
 import config from "./../aws-exports";
 import TimeTracker from "./../components/time-tracker/time-tracker";
+import HabitTracker from "./../components/habit-tracker";
 import SignOutButton from "./../components/admin/sign-out-button";
 import TimeEntryChart from "./../components/time-entry-chart/time-entry-chart";
 
 Amplify.configure(config);
 
 const IndexPage = () => {
-  const [username, setUsername] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     Auth.currentAuthenticatedUser()
-      .then((user_obj) => {
+      .then((userObj) => {
         API.get("api", "/login")
           .then((data) => {
             if (data.success) {
-              setUsername(user_obj.username);
+              const _user = {
+                username: userObj.username,
+                id: userObj.attributes.sub,
+              };
+              setUser(_user);
             }
           })
           .catch((err) => console.log(err));
@@ -28,7 +32,7 @@ const IndexPage = () => {
       .catch((err) => console.log(err)); //TODO: error state
   }, []);
 
-  return username ? (
+  return user ? (
     <div className="App">
       <Head>
         <title>Cultivator</title>
@@ -37,8 +41,9 @@ const IndexPage = () => {
       </Head>
 
       <SignOutButton />
-      <div className="text-light">Hello, {username}</div>
+      <div className="text-light">Hello, {user.username}</div>
       <TimeTracker API={API} />
+      <HabitTracker userId={user.id} />
       <TimeEntryChart />
     </div>
   ) : (
