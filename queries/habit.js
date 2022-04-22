@@ -1,39 +1,31 @@
-const getHabitUrl = (userId) =>
-  `${process.env.NEXT_PUBLIC_TIME_TRACKER_SERVICE}/habit/${userId}`;
+const habitUrl = `${process.env.NEXT_PUBLIC_TIME_TRACKER_SERVICE}/habit`;
 
 export const getUserHabits = async ({ userId }) =>
-  fetch(getHabitUrl(userId))
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-    });
+  fetch(`${habitUrl}/${userId}`).then((response) => response.json());
 
 export const createUserHabit = async ({ userId, name }) =>
-  fetch(getHabitUrl(userId), {
+  fetch(habitUrl, {
     method: "POST",
-    body: JSON.stringify({ userId, name }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-    });
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({ user_id: userId, name }),
+  }).then((response) => response.json());
 
 export const updateUserHabit = async ({ userId, name }) =>
-  fetch(getHabitUrl(userId), {
+  fetch(habitUrl, {
     method: "PUT",
-    body: JSON.stringify({ userId, name }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-    });
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({ user_id: userId, name }),
+  }).then((response) => response.json());
 
 export const deleteUserHabit = async ({ userId, name }) =>
-  fetch(getHabitUrl(userId), {
-    method: "PUT",
-    body: JSON.stringify({ userId, name }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-    });
+  fetch(habitUrl, {
+    method: "DELETE",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({ user_id: userId, name }),
+  }).then((response) => response.json());

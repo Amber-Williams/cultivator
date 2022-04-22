@@ -1,2 +1,23 @@
 @import '../../styles/theme.scss';
 
+.AddHabit {
+    display: flex;
+}
+
+.AddHabitInput {
+    @include input;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.AddHabitSubmitButton {
+    @include input;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
+    padding: 4px 10px;
+
+    &:hover {
+        background-color: $c-darkest;
+    }
+}
