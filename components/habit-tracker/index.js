@@ -1,4 +1,3 @@
-import { input } from "aws-amplify";
 import React, { useEffect, useState, useRef } from "react";
 
 import {
@@ -15,6 +14,7 @@ const Habit = ({
   userId,
   onDeleteHabitSuccess,
   onUpdateHabitSuccess,
+  index,
 }) => {
   const inputRef = useRef();
   const [error, setError] = useState(false);
@@ -29,6 +29,7 @@ const Habit = ({
   const onDelete = () =>
     deleteUserHabit({ userId, habitId: id })
       .then(() => {
+        setIsEditing(false);
         onDeleteHabitSuccess(id);
       })
       .catch((error) => {
@@ -59,38 +60,46 @@ const Habit = ({
     inputRef.current.value = name;
   };
 
+  const editModeHabit = (
+    <>
+      <input
+        ref={inputRef}
+        type="text"
+        placeholder="Enter habit name"
+        className={`${styles.HabitInput} form-control`}
+        onChange={onEditInputChange}
+      />
+      <button className={styles.InputSecondaryButton} onClick={onDelete}>
+        Delete
+      </button>
+      <button className={styles.InputSecondaryButton} onClick={onEditCancel}>
+        Cancel
+      </button>
+      <button className={styles.InputPrimaryButton} onClick={onEdit}>
+        Update
+      </button>
+    </>
+  );
+
   return (
-    <div>
+    <div className="my-2">
       <div className="d-flex">
         {isEditing ? (
-          <>
-            <input
-              ref={inputRef}
-              type="text"
-              placeholder="Enter habit name"
-              className={`${styles.HabitInput} form-control`}
-              onChange={onEditInputChange}
-            />
-            <button className={styles.InputSecondaryButton} onClick={onDelete}>
-              Delete
-            </button>
-            <button
-              className={styles.InputSecondaryButton}
-              onClick={onEditCancel}
-            >
-              Cancel
-            </button>
-            <button className={styles.InputPrimaryButton} onClick={onEdit}>
-              Update
-            </button>
-          </>
+          editModeHabit
         ) : (
-          <>
-            <div>
-              name: {name}, id: {id}
-            </div>
-            <button onClick={() => setIsEditing(true)}>edit</button>
-          </>
+          <div
+            className={`${
+              styles[`HabitItem${(index % 6) + 1}`]
+            } d-flex justify-content-between w-100`}
+          >
+            <div className="py-1 px-3">{name}</div>
+            <button
+              className={`${styles.HabitEditButton} px-3`}
+              onClick={() => setIsEditing(true)}
+            >
+              Edit
+            </button>
+          </div>
         )}
       </div>
       {error && <p>{error}</p>}
@@ -104,6 +113,11 @@ const AddHabit = ({ userId, onAddHabitSuccess }) => {
 
   const onAddHabit = () => {
     const name = inputRef.current.value;
+    if (!name.length) {
+      setError(true);
+      return;
+    }
+
     createUserHabit({ userId, name })
       .then((habit) => {
         inputRef.current.value = "";
@@ -122,17 +136,19 @@ const AddHabit = ({ userId, onAddHabitSuccess }) => {
   };
 
   return (
-    <div className="d-flex">
-      <input
-        ref={inputRef}
-        type="text"
-        placeholder="Enter habit name"
-        className={`${styles.HabitInput} form-control`}
-        onChange={onChange}
-      />
-      <button className={styles.InputPrimaryButton} onClick={onAddHabit}>
-        Add
-      </button>
+    <div>
+      <div className="d-flex">
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="Enter habit name"
+          className={`${styles.HabitInput} form-control`}
+          onChange={onChange}
+        />
+        <button className={styles.InputPrimaryButton} onClick={onAddHabit}>
+          Add
+        </button>
+      </div>
       {error && <p>Something went wrong. Unable to add habit.</p>}
     </div>
   );
@@ -154,7 +170,8 @@ const HabitTracker = ({ userId }) => {
   };
 
   const onDeleteHabitSuccess = (habitId) => {
-    setHabits(habits.filter((habit) => habit.id !== habitId));
+    const newHabits = [...habits].filter((habit) => habit.id !== habitId);
+    setHabits(newHabits);
   };
 
   const onUpdateHabitSuccess = (habit) => {
@@ -166,19 +183,21 @@ const HabitTracker = ({ userId }) => {
 
   if (habits === undefined) {
     return (
-      <>
+      <div>
         <h1>Habit Tracker</h1>
         <div>loading</div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className={styles.HabitTracker}>
       <h1>Habit Tracker</h1>
       <AddHabit userId={userId} onAddHabitSuccess={onAddHabitSuccess} />
-      {habits.map((habit) => (
+      {habits.map((habit, index) => (
         <Habit
+          key={index}
+          index={index}
           userId={userId}
           name={habit.name}
           id={habit.id}
@@ -186,7 +205,7 @@ const HabitTracker = ({ userId }) => {
           onUpdateHabitSuccess={onUpdateHabitSuccess}
         />
       ))}
-    </>
+    </div>
   );
 };
 

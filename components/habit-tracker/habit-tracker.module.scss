@@ -1,5 +1,83 @@
 @import '../../styles/theme.scss';
 
+.HabitTracker {
+    width: calc(100% - 12rem);
+    margin: 0 auto;
+}
+
+.HabitItem1 {
+    @include list-item($c-data-1, $c-white);
+    button {
+        border-left: 1px solid $c-data-1;
+
+        &:hover {
+            background-color: rgba($c-data-1, 0.4);
+        }
+    }
+}
+
+.HabitItem2 {
+    @include list-item($c-data-2, $c-white);
+    button {
+        border-left: 1px solid $c-data-2;
+
+        &:hover {
+            background-color: rgba($c-data-2, 0.4);
+        }
+    }
+}
+
+.HabitItem3 {
+    @include list-item($c-data-3, $c-white);
+    button {
+        border-left: 1px solid $c-data-3;
+
+        &:hover {
+            background-color: rgba($c-data-3, 0.4);
+        }
+    }
+}
+
+.HabitItem4 {
+    @include list-item($c-data-4, $c-white);
+    button {
+        border-left: 1px solid $c-data-4;
+
+        &:hover {
+            background-color: rgba($c-data-4, 0.4);
+        }
+    }
+}
+
+.HabitItem5 {
+    @include list-item($c-data-5, $c-white);
+    button {
+        border-left: 1px solid $c-data-5;
+
+        &:hover {
+            background-color: rgba($c-data-5, 0.4);
+        }
+    }
+}
+
+.HabitItem6 {
+    @include list-item($c-data-6, $c-white);
+
+    button {
+        border-left: 1px solid $c-data-6;
+
+        &:hover {
+            background-color: rgba($c-data-6, 0.4);
+        }
+    }
+}
+
+.HabitEditButton {
+    background: none;
+    color: white;
+    border: none;
+}
+
 .HabitInput {
     @include input;
     border-top-right-radius: 0;
@@ -12,6 +90,7 @@
     border-bottom-left-radius: 0;
     border-left: 0;
     padding: 4px 10px;
+    box-shadow: none !important;
 
     &:hover {
         background-color: $c-darkest;
@@ -22,7 +101,8 @@
     @include input;
     border-radius: 0;
     padding: 4px 10px;
-    
+    box-shadow: none !important;
+
     &:hover {
         background-color: $c-darkest;
     }

@@ -18,7 +18,7 @@
 
     &:focus {
         border: 1px solid $color;
-        box-shadow: 0 0 5px 2px $color;
+        box-shadow: 0 0 2px 1px $color;
         outline: none;
         animation: fade-in-out 3s linear infinite;
         background-color: $background-color;
@@ -37,4 +37,11 @@
     &:focus {
         color: $c-white;
     }
+}
+
+@mixin list-item($color, $text-color, ) {
+    border: 1px solid $color;
+    border-radius: 0.5rem;
+    background-color: rgba($color, .3);
+    color: $text-color;
 }

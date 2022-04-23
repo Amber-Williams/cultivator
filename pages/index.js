@@ -42,9 +42,12 @@ const IndexPage = () => {
 
       <SignOutButton />
       <div className="text-light">Hello, {user.username}</div>
+
       <TimeTracker API={API} />
-      <HabitTracker userId={user.id} />
       <TimeEntryChart />
+      <div className="my-5">
+        <HabitTracker userId={user.id} />
+      </div>
     </div>
   ) : (
     <div className="spinner-border text-dark" role="status"></div>
