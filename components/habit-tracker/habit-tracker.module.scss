@@ -1,18 +1,28 @@
 @import '../../styles/theme.scss';
 
-.AddHabitInput {
+.HabitInput {
     @include input;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
 
-.AddHabitSubmitButton {
+.InputPrimaryButton {
     @include input;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-left: 0;
     padding: 4px 10px;
 
+    &:hover {
+        background-color: $c-darkest;
+    }
+}
+
+.InputSecondaryButton {
+    @include input;
+    border-radius: 0;
+    padding: 4px 10px;
+    
     &:hover {
         background-color: $c-darkest;
     }

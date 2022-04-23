@@ -12,13 +12,13 @@ export const createUserHabit = async ({ userId, name }) =>
     body: JSON.stringify({ user_id: userId, name }),
   }).then((response) => response.json());
 
-export const updateUserHabit = async ({ userId, name }) =>
+export const updateUserHabit = async ({ userId, habitId, name }) =>
   fetch(habitUrl, {
     method: "PUT",
     headers: {
       "Content-type": "application/json",
     },
-    body: JSON.stringify({ user_id: userId, name }),
+    body: JSON.stringify({ user_id: userId, habit_id: habitId, name }),
   }).then((response) => response.json());
 
 export const deleteUserHabit = async ({ userId, habitId }) =>
