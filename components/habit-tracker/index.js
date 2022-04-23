@@ -1,13 +1,36 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import { getUserHabits, createUserHabit } from "./../../queries/habit";
+import {
+  getUserHabits,
+  createUserHabit,
+  deleteUserHabit,
+} from "./../../queries/habit";
 import styles from "./habit-tracker.module.scss";
 
-const Habit = ({ name, id }) => (
-  <div>
-    name: {name}, id: {id}
-  </div>
-);
+const Habit = ({ name, id, userId, onDeleteHabitSuccess }) => {
+  const [error, setError] = useState(false);
+  const onDeleteHabit = () =>
+    deleteUserHabit({ userId, habitId: id })
+      .then(() => {
+        onDeleteHabitSuccess(id);
+      })
+      .catch((error) => {
+        console.error(error);
+        setError(true);
+      });
+
+  return (
+    <div>
+      <div className="d-flex">
+        <div>
+          name: {name}, id: {id}
+        </div>
+        <button onClick={onDeleteHabit}>x</button>
+      </div>
+      {error && <p>Something went wrong. Habit was not deleted.</p>}
+    </div>
+  );
+};
 
 const AddHabit = ({ userId, onAddHabitSuccess }) => {
   const [error, setError] = useState(false);
@@ -31,7 +54,7 @@ const AddHabit = ({ userId, onAddHabitSuccess }) => {
   };
 
   return (
-    <div className={styles.AddHabit}>
+    <div className="d-flex">
       <input
         ref={inputRef}
         type="text"
@@ -42,7 +65,7 @@ const AddHabit = ({ userId, onAddHabitSuccess }) => {
       <button className={styles.AddHabitSubmitButton} onClick={onAddHabit}>
         Add
       </button>
-      {error && <p>Something went wrong</p>}
+      {error && <p>Something went wrong. Unable to add habit.</p>}
     </div>
   );
 };
@@ -62,6 +85,10 @@ const HabitTracker = ({ userId }) => {
     setHabits([...habits, habit]);
   };
 
+  const onDeleteHabitSuccess = (habitId) => {
+    setHabits(habits.filter((habit) => habit.id !== habitId));
+  };
+
   if (habits === undefined) {
     return (
       <>
@@ -76,7 +103,12 @@ const HabitTracker = ({ userId }) => {
       <h1>Habit Tracker</h1>
       <AddHabit userId={userId} onAddHabitSuccess={onAddHabitSuccess} />
       {habits.map((habit) => (
-        <Habit name={habit.name} id={habit.id} />
+        <Habit
+          userId={userId}
+          name={habit.name}
+          id={habit.id}
+          onDeleteHabitSuccess={onDeleteHabitSuccess}
+        />
       ))}
     </>
   );

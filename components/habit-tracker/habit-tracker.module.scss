@@ -1,9 +1,5 @@
 @import '../../styles/theme.scss';
 
-.AddHabit {
-    display: flex;
-}
-
 .AddHabitInput {
     @include input;
     border-top-right-radius: 0;

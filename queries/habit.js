@@ -21,11 +21,11 @@ export const updateUserHabit = async ({ userId, name }) =>
     body: JSON.stringify({ user_id: userId, name }),
   }).then((response) => response.json());
 
-export const deleteUserHabit = async ({ userId, name }) =>
+export const deleteUserHabit = async ({ userId, habitId }) =>
   fetch(habitUrl, {
     method: "DELETE",
     headers: {
       "Content-type": "application/json",
     },
-    body: JSON.stringify({ user_id: userId, name }),
-  }).then((response) => response.json());
+    body: JSON.stringify({ user_id: userId, habit_id: habitId }),
+  });
