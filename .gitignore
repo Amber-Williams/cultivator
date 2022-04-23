@@ -21,7 +21,3 @@ amplifytools.xcconfig
 
 # VSCode
 .vscode/
-
-# Amplify
-amplify/team-provider-info.json
-amplify/README.md

@@ -63,38 +63,5 @@
         }
       }
     }
-  },
-  "amplify": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-cultivator-amplify-202509-authRole",
-      "UnauthRoleArn": "arn:aws:iam::838197045453:role/amplify-cultivator-amplify-202509-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::838197045453:role/amplify-cultivator-amplify-202509-authRole",
-      "Region": "eu-west-2",
-      "DeploymentBucketName": "amplify-cultivator-amplify-202509-deployment",
-      "UnauthRoleName": "amplify-cultivator-amplify-202509-unauthRole",
-      "StackName": "amplify-cultivator-amplify-202509",
-      "StackId": "arn:aws:cloudformation:eu-west-2:838197045453:stack/amplify-cultivator-amplify-202509/c2849ca0-c1a8-11ec-a03c-02663fb93268",
-      "AmplifyAppId": "d28oa2cl6alh4r",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-cultivator-amplify-202509-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
-    },
-    "categories": {
-      "auth": {
-        "cultivator31376581": {}
-      },
-      "function": {
-        "entry": {
-          "deploymentBucketName": "amplify-cultivator-amplify-202509-deployment",
-          "s3Key": "amplify-builds/entry-5a3864316b5654446874-build.zip"
-        },
-        "entrytype": {
-          "deploymentBucketName": "amplify-cultivator-amplify-202509-deployment",
-          "s3Key": "amplify-builds/entrytype-39494f30745746494d53-build.zip"
-        },
-        "login": {
-          "deploymentBucketName": "amplify-cultivator-amplify-202509-deployment",
-          "s3Key": "amplify-builds/login-596f35326b7766524151-build.zip"
-        }
-      }
-    }
   }
 }
