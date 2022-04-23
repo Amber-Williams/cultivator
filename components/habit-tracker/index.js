@@ -6,9 +6,11 @@ import {
   deleteUserHabit,
   updateUserHabit,
 } from "./../../queries/habit";
+import { getUserDateHabits } from "./../../queries/daily";
 import styles from "./habit-tracker.module.scss";
 
 const Habit = ({
+  selected,
   name,
   id,
   userId,
@@ -87,14 +89,22 @@ const Habit = ({
         {isEditing ? (
           editModeHabit
         ) : (
-          <div
-            className={`${
-              styles[`HabitItem${(index % 6) + 1}`]
-            } d-flex justify-content-between w-100`}
-          >
-            <div className="py-1 px-3">{name}</div>
+          <div className="d-flex justify-content-between w-100">
+            <div
+              className={`
+                ${styles.HabitItem} 
+              ${
+                styles[
+                  `HabitItem${(index % 6) + 1}${selected ? "Selected" : ""}`
+                ]
+              } w-100 py-1 px-3`}
+            >
+              {name}
+            </div>
             <button
-              className={`${styles.HabitEditButton} px-3`}
+              className={`${styles.HabitEditButton} ${
+                styles[`HabitItem${(index % 6) + 1}Button`]
+              }  px-3`}
               onClick={() => setIsEditing(true)}
             >
               Edit
@@ -156,11 +166,21 @@ const AddHabit = ({ userId, onAddHabitSuccess }) => {
 
 const HabitTracker = ({ userId }) => {
   const [habits, setHabits] = useState();
+  const [selectedHabits, setSelectedHabits] = useState();
 
   useEffect(() => {
     const func = async () => {
-      const habits = await getUserHabits({ userId });
+      const [habits, daily] = await Promise.all([
+        getUserHabits({ userId }),
+        getUserDateHabits({ userId, date: new Date() }),
+      ]);
+
       setHabits(habits);
+
+      const hasDaily = daily.length > 0;
+      if (hasDaily) {
+        setSelectedHabits(daily[0].habits);
+      }
     };
     func();
   }, [userId]);
@@ -196,6 +216,12 @@ const HabitTracker = ({ userId }) => {
       <AddHabit userId={userId} onAddHabitSuccess={onAddHabitSuccess} />
       {habits.map((habit, index) => (
         <Habit
+          selected={
+            selectedHabits &&
+            selectedHabits.find((_habit) => _habit.id === habit.id)
+              ? true
+              : false
+          }
           key={index}
           index={index}
           userId={userId}

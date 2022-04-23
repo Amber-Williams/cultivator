@@ -7,75 +7,104 @@
 
 .HabitItem1 {
     @include list-item($c-data-1, $c-white);
-    button {
-        border-left: 1px solid $c-data-1;
-
-        &:hover {
-            background-color: rgba($c-data-1, 0.4);
-        }
-    }
 }
 
 .HabitItem2 {
     @include list-item($c-data-2, $c-white);
-    button {
-        border-left: 1px solid $c-data-2;
-
-        &:hover {
-            background-color: rgba($c-data-2, 0.4);
-        }
-    }
 }
 
 .HabitItem3 {
     @include list-item($c-data-3, $c-white);
-    button {
-        border-left: 1px solid $c-data-3;
-
-        &:hover {
-            background-color: rgba($c-data-3, 0.4);
-        }
-    }
 }
 
 .HabitItem4 {
     @include list-item($c-data-4, $c-white);
-    button {
-        border-left: 1px solid $c-data-4;
-
-        &:hover {
-            background-color: rgba($c-data-4, 0.4);
-        }
-    }
 }
 
 .HabitItem5 {
     @include list-item($c-data-5, $c-white);
-    button {
-        border-left: 1px solid $c-data-5;
-
-        &:hover {
-            background-color: rgba($c-data-5, 0.4);
-        }
-    }
 }
 
 .HabitItem6 {
     @include list-item($c-data-6, $c-white);
+}
 
-    button {
-        border-left: 1px solid $c-data-6;
+.HabitItem1Selected {
+    @include list-item-selected($c-data-1, $c-white);
+}
 
-        &:hover {
-            background-color: rgba($c-data-6, 0.4);
-        }
+.HabitItem2Selected {
+    @include list-item-selected($c-data-2, $c-white);
+}
+
+.HabitItem3Selected {
+    @include list-item-selected($c-data-3, $c-white);
+}
+
+.HabitItem4Selected {
+    @include list-item-selected($c-data-4, $c-white);
+}
+
+.HabitItem5Selected {
+    @include list-item-selected($c-data-5, $c-white);
+}
+
+.HabitItem6Selected {
+    @include list-item-selected($c-data-6, $c-white);
+}
+
+
+
+.HabitItem1Button {
+    @include list-item($c-data-1, $c-white);
+    &:hover {
+        background-color: rgba($c-data-1, 0.4);
+    }
+}
+
+.HabitItem2Button {
+    @include list-item($c-data-2, $c-white);
+    &:hover {
+        background-color: rgba($c-data-2, 0.4);
+    }
+}
+
+.HabitItem3Button {
+    @include list-item($c-data-3, $c-white);
+    &:hover {
+        background-color: rgba($c-data-3, 0.4);
+    }
+}
+
+.HabitItem4Button {
+    @include list-item($c-data-4, $c-white);
+    &:hover {
+        background-color: rgba($c-data-5, 0.4);
+    }
+}
+
+.HabitItem5Button {
+    @include list-item($c-data-5, $c-white);
+    &:hover {
+        background-color: rgba($c-data-5, 0.4);
+    }
+}
+
+.HabitItem6Button {
+    @include list-item($c-data-6, $c-white);
+    &:hover {
+        background-color: rgba($c-data-6, 0.4);
     }
 }
 
 .HabitEditButton {
-    background: none;
-    color: white;
-    border: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.HabitItem {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 .HabitInput {

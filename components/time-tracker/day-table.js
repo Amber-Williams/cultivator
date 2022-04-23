@@ -18,18 +18,18 @@ const DayTable = ({
   return (
     <div className={styles.DayTable}>
       <div
-        class="d-flex justify-content-end form-check form-switch"
+        className="d-flex justify-content-end form-check form-switch"
         onClick={() => setIsAM(!isAM)}
       >
-        <p class="text-light">
+        <p className="text-light">
           <SunIcon />
         </p>
         <input
-          class={`${styles.DayTableSwitch} form-check-input`}
+          className={`${styles.DayTableSwitch} form-check-input`}
           type="checkbox"
           checked={isAM}
         />
-        <p class="text-light">
+        <p className="text-light">
           <MoonIcon />
         </p>
       </div>
