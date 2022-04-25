@@ -6,7 +6,7 @@ import {
   deleteUserHabit,
   updateUserHabit,
 } from "./../../queries/habit";
-import { getUserDateHabits } from "./../../queries/daily";
+import { getUserDateHabits, addDailyDateHabit } from "./../../queries/daily";
 import styles from "./habit-tracker.module.scss";
 
 const Habit = ({
@@ -14,6 +14,7 @@ const Habit = ({
   name,
   id,
   userId,
+  onClick,
   onDeleteHabitSuccess,
   onUpdateHabitSuccess,
   index,
@@ -98,6 +99,7 @@ const Habit = ({
                   `HabitItem${(index % 6) + 1}${selected ? "Selected" : ""}`
                 ]
               } w-100 py-1 px-3`}
+              onClick={onClick}
             >
               {name}
             </div>
@@ -166,7 +168,7 @@ const AddHabit = ({ userId, onAddHabitSuccess }) => {
 
 const HabitTracker = ({ userId }) => {
   const [habits, setHabits] = useState();
-  const [selectedHabits, setSelectedHabits] = useState();
+  const [daily, setDaily] = useState();
 
   useEffect(() => {
     const func = async () => {
@@ -179,7 +181,7 @@ const HabitTracker = ({ userId }) => {
 
       const hasDaily = daily.length > 0;
       if (hasDaily) {
-        setSelectedHabits(daily[0].habits);
+        setDaily(daily[0]);
       }
     };
     func();
@@ -201,6 +203,25 @@ const HabitTracker = ({ userId }) => {
     setHabits(newHabits);
   };
 
+  const onSelectHabit = async (habitId, _daily) => {
+    const isSelected = _daily?.habits?.find((_habit) => _habit.id === habitId);
+    let selectedHabitIdList = _daily.habits.map((h) => h.id);
+    if (isSelected) {
+      selectedHabitIdList = selectedHabitIdList.filter(
+        (_habitId) => _habitId !== habitId
+      );
+    } else {
+      selectedHabitIdList = [...selectedHabitIdList, habitId];
+    }
+    const newDaily = await addDailyDateHabit({
+      dailyId: daily?.id,
+      userId,
+      date: new Date(),
+      habits: selectedHabitIdList,
+    });
+    setDaily(newDaily);
+  };
+
   if (habits === undefined) {
     return (
       <div>
@@ -214,23 +235,24 @@ const HabitTracker = ({ userId }) => {
     <div className={styles.HabitTracker}>
       <h1>Habit Tracker</h1>
       <AddHabit userId={userId} onAddHabitSuccess={onAddHabitSuccess} />
-      {habits.map((habit, index) => (
-        <Habit
-          key={index}
-          selected={
-            selectedHabits &&
-            selectedHabits.find((_habit) => _habit.id === habit.id)
-              ? true
-              : false
-          }
-          index={index}
-          userId={userId}
-          name={habit.name}
-          id={habit.id}
-          onDeleteHabitSuccess={onDeleteHabitSuccess}
-          onUpdateHabitSuccess={onUpdateHabitSuccess}
-        />
-      ))}
+      {habits.map((habit, index) => {
+        const selected = daily?.habits?.find((_habit) => _habit.id === habit.id)
+          ? true
+          : false;
+        return (
+          <Habit
+            key={index}
+            selected={selected}
+            index={index}
+            userId={userId}
+            name={habit.name}
+            id={habit.id}
+            onDeleteHabitSuccess={onDeleteHabitSuccess}
+            onUpdateHabitSuccess={onUpdateHabitSuccess}
+            onClick={() => onSelectHabit(habit.id, daily)}
+          />
+        );
+      })}
     </div>
   );
 };
