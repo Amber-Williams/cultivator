@@ -216,13 +216,13 @@ const HabitTracker = ({ userId }) => {
       <AddHabit userId={userId} onAddHabitSuccess={onAddHabitSuccess} />
       {habits.map((habit, index) => (
         <Habit
+          key={index}
           selected={
             selectedHabits &&
             selectedHabits.find((_habit) => _habit.id === habit.id)
               ? true
               : false
           }
-          key={index}
           index={index}
           userId={userId}
           name={habit.name}
