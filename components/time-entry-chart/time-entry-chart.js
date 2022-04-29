@@ -163,9 +163,7 @@ function TimeEntryChart() {
   }, [date_start, date_end]);
 
   return (
-    <div
-      className={`${styles.TimeEntryChart} text-light d-flex flex-column align-items-center mb-5`}
-    >
+    <div className="text-light d-flex flex-column align-items-center mb-5">
       <h4>Entry Data</h4>
       <div className="d-flex my-3">
         <div>
@@ -178,7 +176,7 @@ function TimeEntryChart() {
         </div>
       </div>
 
-      <div className="chart-container">
+      <div className={styles.TimeEntryChartContainer}>
         <canvas ref={chart_element} width="500" height="500"></canvas>
       </div>
     </div>
