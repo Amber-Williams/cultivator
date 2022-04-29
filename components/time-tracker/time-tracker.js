@@ -3,7 +3,7 @@ import moment from "moment";
 import _ from "lodash";
 import { useSelector, useDispatch } from "react-redux";
 
-import { set_entry_types } from "./entry-types-slice";
+import { setEntryTypes, setSelectedDate } from "./time-tracker-slice";
 import { times } from "./../../utils/times";
 import TypePicker from "../type-picker/type-picker";
 import DatePicker from "./../date-picker/date-picker";
@@ -12,7 +12,12 @@ import DailyNotes from "./daily-notes";
 import styles from "./time-tracker.module.scss";
 
 const TimeTracker = ({ API }) => {
-  const entry_types = useSelector((state) => state.entry_types.value);
+  const selectedDate = useSelector(
+    (state) => state.timeTackerState.selectedDate.value
+  );
+  const entryTypes = useSelector(
+    (state) => state.timeTackerState.entryTypes.value
+  );
   const dispatch = useDispatch();
 
   const [type, set_type] = useState("work");
@@ -20,15 +25,14 @@ const TimeTracker = ({ API }) => {
   const [notes, set_notes] = useState(null);
   const [loading, set_loading] = useState(true);
   const [api_loading, set_api_loading] = useState(false);
-  const [date, set_date] = useState(moment().format("YYYY-MM-DD"));
 
   const stateRef = useRef();
-  stateRef.current = { date, time_entry, notes }; // gets current state outside of api scope
+  stateRef.current = { selectedDate, time_entry, notes }; // gets current state outside of api scope
 
   useEffect(() => {
     API.get("api", "/entry-type")
-      .then((entry_types) => {
-        dispatch(set_entry_types(entry_types));
+      .then((entryTypes) => {
+        dispatch(setEntryTypes(entryTypes));
       })
       .catch((err) => console.log(err));
   }, []);
@@ -36,7 +40,7 @@ const TimeTracker = ({ API }) => {
   useEffect(() => {
     set_api_loading(true);
 
-    API.get("api", `/entry?date=${moment(date).format("YYYY-MM-DD")}`)
+    API.get("api", `/entry?date=${moment(selectedDate).format("YYYY-MM-DD")}`)
       .then((data) => {
         if (data["_id"]) {
           data.time_entry
@@ -51,7 +55,7 @@ const TimeTracker = ({ API }) => {
         set_loading(false);
       })
       .catch((err) => console.log(err)); // TODO: error state
-  }, [date]);
+  }, [selectedDate]);
 
   useEffect(() => {
     if (loading) return;
@@ -62,7 +66,7 @@ const TimeTracker = ({ API }) => {
     if (loading) return;
     const time_entry_copy = JSON.parse(JSON.stringify(time_entry));
     time_entry_copy[time] = type ? type : null;
-    await set_time_entry(time_entry_copy);
+    set_time_entry(time_entry_copy);
     send_entry();
   };
 
@@ -73,7 +77,7 @@ const TimeTracker = ({ API }) => {
     time_entry_copy[hour + ":15"] = type ? type : null;
     time_entry_copy[hour + ":30"] = type ? type : null;
     time_entry_copy[hour + ":45"] = type ? type : null;
-    await set_time_entry(time_entry_copy);
+    set_time_entry(time_entry_copy);
     send_entry();
   };
 
@@ -122,17 +126,23 @@ const TimeTracker = ({ API }) => {
     }
   };
 
-  if (!loading && entry_types) {
+  const onDateChange = (date) => {
+    if (date.length > 0 && date !== selectedDate) {
+      dispatch(setSelectedDate(date));
+    }
+  };
+
+  if (!loading && entryTypes) {
     return (
       <div className={styles.TimeTracker}>
-        <DatePicker date={date} set_date={set_date} />
+        <DatePicker date={selectedDate} set_date={onDateChange} />
         <TypePicker set_type={set_type} />
         <DayTable
           type={type}
           update_time_entry={update_time_entry}
           update_hour_entry={update_hour_entry}
           time_entry={time_entry}
-          entry_types={entry_types}
+          entry_types={entryTypes}
         />
         <DailyNotes set_notes={set_notes} notes={notes} />
       </div>

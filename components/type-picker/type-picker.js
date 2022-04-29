@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { API } from "aws-amplify";
 
-import { set_entry_types } from "./../time-tracker/entry-types-slice";
+import { setEntryTypes } from "../time-tracker/time-tracker-slice";
 import { invert_color } from "./../../utils/style";
 import CirclePlusIcon from "./../svgs/circle-plus";
 import CircleMinusIcon from "./../svgs/circle-minus";
@@ -26,7 +26,9 @@ const TypePickerItem = ({ name, color, on_click, on_remove }) => (
 );
 
 const TypePicker = ({ set_type }) => {
-  const entry_types = useSelector((state) => state.entry_types.value);
+  const entry_types = useSelector(
+    (state) => state.timeTackerState.entryTypes.value
+  );
   const dispatch = useDispatch();
 
   const [new_entry, set_new_entry] = useState(null);
@@ -70,7 +72,7 @@ const TypePicker = ({ set_type }) => {
           set_error(data.error);
           return;
         }
-        dispatch(set_entry_types(data.data));
+        dispatch(setEntryTypes(data.data));
         set_show_entry_editor(false);
       })
       .catch((err) => console.log(err)); //TODO: error handling
@@ -85,7 +87,7 @@ const TypePicker = ({ set_type }) => {
         entry_type,
       },
     }).then((data) => {
-      dispatch(set_entry_types(data.data));
+      dispatch(setEntryTypes(data.data));
     });
   }
 

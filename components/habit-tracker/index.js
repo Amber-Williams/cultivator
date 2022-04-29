@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
 
 import {
   getUserHabits,
@@ -167,6 +168,9 @@ const AddHabit = ({ userId, onAddHabitSuccess }) => {
 };
 
 const HabitTracker = ({ userId }) => {
+  const selectedDate = useSelector(
+    (state) => state.timeTackerState.selectedDate.value
+  );
   const [habits, setHabits] = useState();
   const [daily, setDaily] = useState();
 
@@ -174,18 +178,14 @@ const HabitTracker = ({ userId }) => {
     const func = async () => {
       const [habits, daily] = await Promise.all([
         getUserHabits({ userId }),
-        getUserDateHabits({ userId, date: new Date() }),
+        getUserDateHabits({ userId, date: selectedDate }),
       ]);
 
       setHabits(habits);
-
-      const hasDaily = daily.length > 0;
-      if (hasDaily) {
-        setDaily(daily[0]);
-      }
+      setDaily(daily[0]);
     };
     func();
-  }, [userId]);
+  }, [userId, selectedDate]);
 
   const onAddHabitSuccess = (habit) => {
     setHabits([...habits, habit]);
@@ -205,7 +205,7 @@ const HabitTracker = ({ userId }) => {
 
   const onSelectHabit = async (habitId, _daily) => {
     const isSelected = _daily?.habits?.find((_habit) => _habit.id === habitId);
-    let selectedHabitIdList = _daily.habits.map((h) => h.id);
+    let selectedHabitIdList = _daily?.habits?.map((h) => h.id) ?? [];
     if (isSelected) {
       selectedHabitIdList = selectedHabitIdList.filter(
         (_habitId) => _habitId !== habitId
@@ -216,7 +216,7 @@ const HabitTracker = ({ userId }) => {
     const newDaily = await addDailyDateHabit({
       dailyId: daily?.id,
       userId,
-      date: new Date(),
+      date: selectedDate,
       habits: selectedHabitIdList,
     });
     setDaily(newDaily);

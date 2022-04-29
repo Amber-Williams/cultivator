@@ -111,7 +111,9 @@ function format_data_for_time_entry_chart(labels, data, entry_types) {
 }
 
 function TimeEntryChart() {
-  const entry_types = useSelector((state) => state.entry_types.value);
+  const entry_types = useSelector(
+    (state) => state.timeTackerState.entryTypes.value
+  );
 
   const chart_element = useRef(null);
   const [date_start, set_date_start] = useState(
