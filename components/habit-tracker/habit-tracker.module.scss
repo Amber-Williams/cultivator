@@ -31,7 +31,7 @@
 
 .HabitItem1Selected {
     @include list-item-selected($c-data-1, $c-dark);
-    
+    font-weight: 600;
 }
 
 .HabitItem2Selected {
@@ -106,6 +106,8 @@
 .HabitEditButton {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+    border-left: 0;
+    width: 75px;
 }
 
 .HabitItem {
@@ -118,6 +120,7 @@
     @include input;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    padding-left: 16px;
 }
 
 .InputPrimaryButton {
@@ -125,8 +128,8 @@
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-left: 0;
-    padding: 4px 10px;
     box-shadow: none !important;
+    width: 75px;
 
     &:hover {
         background-color: $c-darkest;

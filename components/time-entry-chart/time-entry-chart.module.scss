@@ -2,4 +2,8 @@
   width: calc(100vw - 12rem);
   height: 400px;
   margin: 0 2rem;
+
+  @media screen and (max-width: 768px) {
+    width: 100vw;
+  }
 }

@@ -177,7 +177,7 @@ function TimeEntryChart() {
       </div>
 
       <div className={styles.TimeEntryChartContainer}>
-        <canvas ref={chart_element} width="500" height="500"></canvas>
+        <canvas ref={chart_element}></canvas>
       </div>
     </div>
   );

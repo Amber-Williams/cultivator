@@ -225,7 +225,7 @@ const HabitTracker = ({ userId }) => {
   if (habits === undefined) {
     return (
       <div>
-        <h1>Habit Tracker</h1>
+        <h4 className="my-3">Habit Tracker</h4>
         <div>loading</div>
       </div>
     );
@@ -233,7 +233,7 @@ const HabitTracker = ({ userId }) => {
 
   return (
     <div className={styles.HabitTracker}>
-      <h1>Habit Tracker</h1>
+      <h4 className="my-3">Habit Tracker</h4>
       <AddHabit userId={userId} onAddHabitSuccess={onAddHabitSuccess} />
       {habits.map((habit, index) => {
         const selected = daily?.habits?.find((_habit) => _habit.id === habit.id)
