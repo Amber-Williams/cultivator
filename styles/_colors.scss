@@ -1,0 +1,27 @@
+////////////////////////////
+//      brand coloring   // 
+//////////////////////////
+
+// mains
+$c-primary: #ff4c5f;
+$c-accent: #3646ff;
+
+// semantics
+$c-error: #c12b3d;
+$c-warning: #e0a838;
+$c-success: #98d484;
+$c-info: #1f5bf8;
+
+// neutrals - text, containers, shadows, and system icons
+$c-darkest: #212329;
+$c-dark: #313640;
+$c-light-dark: lighten(#313640, 10%);
+$c-white: white;
+
+// charting and data visualizations
+$c-data-1: $c-primary;
+$c-data-2: #faff82;
+$c-data-3: #706cff;
+$c-data-4: #ffa53f;
+$c-data-5: $c-accent;
+$c-data-6: #00d88a;

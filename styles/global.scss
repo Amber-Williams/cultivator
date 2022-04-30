@@ -1,0 +1,11 @@
+@import '~bootstrap/scss/bootstrap';
+@import './theme.scss';
+
+.App {
+  text-align: center;
+  background-color: $c-darkest;
+  color: $c-white;
+  min-height: 100vh;
+  position: absolute;
+  min-width: 100vw;
+}

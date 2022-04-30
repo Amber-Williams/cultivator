@@ -6,6 +6,7 @@ Development version of application is hosted [here](https://production.d28oa2cl6
 2. Install Yarn
 3. Run `amplify configure`
 4. Install developer dependencies `yarn install`
+5. Create `.env` from `.example.env`
 
 ### Initial set up of serverless backend
 

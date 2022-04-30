@@ -2,15 +2,22 @@
   "name": "cultivator",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "develop": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
   "dependencies": {
     "@aws-amplify/ui-components": "1.0.3",
     "@aws-amplify/ui-react": "1.0.3",
     "@reduxjs/toolkit": "1.5.1",
     "aws-amplify": "3.3.19",
     "bootstrap": "5.0.0",
-    "chart.js": "3.2.1",
+    "chart.js": "3.7.1",
     "lodash": "4.17.21",
     "moment": "2.29.1",
+    "next": "12.1.5",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-redux": "7.2.4",
@@ -18,38 +25,12 @@
     "web-vitals": "1.1.0"
   },
   "devDependencies": {
-    "node-sass": "^6.0.0",
-    "sass-loader": "10.1.1",
-    "@testing-library/jest-dom": "5.11.9",
-    "@testing-library/react": "11.2.5",
-    "@testing-library/user-event": "12.7.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "eslint": "8.13.0",
+    "eslint-config-next": "12.1.5",
+    "sass": "1.50.1"
   },
   "engines": {
-    "node": "16.14.2",
+    "node": ">=16.14.2",
     "npm": ">=1.22.17"
   }
 }

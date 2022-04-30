@@ -1,0 +1,31 @@
+@import '../../styles/theme.scss';
+
+.TypePicker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    min-width: 300px;
+}
+
+.TypePickerEntries {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.TypePickerEntryInput {
+    @include input;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.TypePickerColorInput {
+    @include input;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
+    padding: 4px 10px;
+}
+
+.TypePickerAddButton {
+    @include input;
+}
