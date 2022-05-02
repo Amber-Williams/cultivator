@@ -1,14 +1,16 @@
+import Amplify from "aws-amplify";
 import { Provider } from "react-redux";
 
-import store from "./../store";
+import store from "./../features/store";
+import authConfig from "./../features/auth";
 import "./../styles/global.scss";
 
-function MyApp({ Component, pageProps }) {
-  return (
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>
-  );
-}
+Amplify.configure(authConfig);
+
+const MyApp = ({ Component, pageProps }) => (
+  <Provider store={store}>
+    <Component {...pageProps} />
+  </Provider>
+);
 
 export default MyApp;
