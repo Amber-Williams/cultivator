@@ -1,15 +1,12 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
-import Amplify, { API, Auth } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 
-import config from "./../aws-exports";
 import TimeTracker from "./../components/time-tracker/time-tracker";
 import HabitTracker from "./../components/habit-tracker";
 import SignOutButton from "./../components/admin/sign-out-button";
 import TimeEntryChart from "./../components/time-entry-chart/time-entry-chart";
-
-Amplify.configure(config);
 
 const IndexPage = () => {
   const [user, setUser] = useState(null);
