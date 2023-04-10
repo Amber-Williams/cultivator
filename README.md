@@ -1,4 +1,13 @@
-Development version of application is hosted [here](https://production.d28oa2cl6alh4r.amplifyapp.com/).
+Development version of application is hosted [here](https://master.d7w45zzpmjkiw.amplifyapp.com/)
+Use username: `test-test-test`
+pass: `OmgWow7117!`
+
+<p align="center">
+    <img alt="Yall logo"  src="https://github.com/Amber-Williams/cultivator/blob/master/demo.mov" width="500"/>
+</p>
+
+- note: Habit tracking feature isn't hosted so won't load in the development version of the app
+  [Link to habit tracking service's code](https://github.com/Amber-Williams/time-tracker-api)
 
 ## Prerequisites
 
@@ -15,4 +24,4 @@ Development version of application is hosted [here](https://production.d28oa2cl6
 
 ## Running the repo locally
 
-`yarn start`
+`yarn develop`
