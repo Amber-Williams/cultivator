@@ -1,10 +1,14 @@
-Development version of application is hosted [here](https://master.d7w45zzpmjkiw.amplifyapp.com/)
-Use username: `test-test-test`
-pass: `OmgWow7117!`
+# Cultivator
 
 <p align="center">
-    <img alt="Yall logo"  src="https://github.com/Amber-Williams/cultivator/blob/master/demo.mov" width="500"/>
+    <img alt="Video of Cultivator web app demo"  src="https://github.com/Amber-Williams/cultivator/blob/master/demo.gif" width="500"/>
 </p>
+
+Development version of application is hosted [here](https://master.d7w45zzpmjkiw.amplifyapp.com/)
+<br/>
+username: `test-test-test`
+<br/>
+pass: `OmgWow7117!`
 
 - note: Habit tracking feature isn't hosted so won't load in the development version of the app
   [Link to habit tracking service's code](https://github.com/Amber-Williams/time-tracker-api)
